@@ -1,0 +1,22 @@
+{% if mlist %}
+<ul>
+        {% for m in mlist %}
+        <!-- <li><a href="/polls/{{ poll.id }}/">{{ m }}</li> -->
+        <li> --------------------------------------------------------------------------------------</li>
+        <img src="{{STATIC_URL}}{{m.pic_url }}" > 
+        <li>中文名：{{ m.cname }}</li>
+        <li>英文名：{{ m.ename }}</li>
+        <li>主演：{{ m.actors }}</li>
+        <li>导演：{{ m.director }}</li>
+        <li>地区：{{ m.location }}</li>
+        <li>类型：{{ m.type }}</li>
+        <li>上映时间：{{ m.date }}</li>
+        <li>豆瓣评分：{{ m.rate }}</li>
+            {% for d in m.download_link %}
+                <li><a href=" {{ d.0}} " > {{ d.1}}</a> </li>
+            {% endfor %}
+        {% endfor %}
+</ul>
+{% else %}
+<p>No movie are available.</p>
+{% endif %}
