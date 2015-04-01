@@ -36,9 +36,9 @@ PRIMARY KEY (id)) engine=innodb default charset=utf8 ;')
     print data
     cursor.execute('create table linkinfo( \
 id bigint unsigned NOT NULL, \
-url varchar(100) character set utf8, \
-title varchar(100) character set utf8,  \
-PRIMARY KEY (id)) engine=innodb default charset=utf8 ;')
+url varchar(1000) character set utf8, \
+title varchar(200) character set utf8,  \
+INDEX (id)) engine=innodb default charset=utf8 ;')
 
     data = cursor.fetchall()
     print data
