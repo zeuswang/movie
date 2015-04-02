@@ -1,4 +1,6 @@
+# -*- coding:utf-8 -*-
 import MySQLdb
+import datetime
 import sys
 class Item:
     def __init__(self):
@@ -51,7 +53,10 @@ def update_link(file,cursor):
             insertlist.append(it)
     print len(insertlist)
     for it in insertlist:
-        sql='insert into linkinfo(id,url,title) values(%d,"%s","%s");' % (int(it.id),it.url,it.title)
+        time = datetime.datetime.now()
+        time_int= int(time.strftime('%Y'))* 10000 + int(time.strftime('%m'))*100 + int(time.strftime('%d'))
+        print time_int
+        sql='insert into linkinfo(id,url,title,found_date) values(%d,"%s","%s",%d);' % (int(it.id),it.url,it.title,time_int)
         print sql
         cursor.execute(sql)    
         data = cursor.fetchall()
@@ -83,11 +88,18 @@ for line in open(datadir +'/movie'):
     it.location = flist[6]
     it.type = flist[7]
     strdate = flist[8]
-    if len(strdate)>4:
+    if '-' in strdate:
         try:
-            it.date =int(strdate[0:4])
+            numlist = strdate[0:10].split('-')
+            it.date = int(numlist[0])*10000 +int(numlist[1])*100 +int(numlist[2])
         except:  
             it.date = 0
+    elif len(strdate)>4:
+        try:
+            it.date = int(strdate[0:4])*10000
+        except:
+            it.date =0
+                
     it.rate=0
     if len(flist[10])>0:
         it.rate=int(float(flist[10])*10)

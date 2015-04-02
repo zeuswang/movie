@@ -13,7 +13,7 @@
         <li>上映时间：{{ m.date }}</li>
         <li>豆瓣评分：{{ m.rate }}</li>
             {% for d in m.download_link %}
-                <li><a href=" {{ d.0}} " > {{ d.1}}</a> </li>
+                <li><a href=" {{ d.1}} " > {{ d.2}}</a> </li>
             {% endfor %}
         {% endfor %}
 </ul>

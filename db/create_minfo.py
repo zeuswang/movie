@@ -27,7 +27,7 @@ imdb_link varchar(100) character set utf8,  \
 douban_link varchar(100) character set utf8,    \
 comment_link varchar(100) character set utf8,   \
 summary text character set utf8,    \
-date smallint,  \
+date bigint unsigned,  \
 rate tinyint,   \
 votes int,  \
 PRIMARY KEY (id)) engine=innodb default charset=utf8 ;')
@@ -38,6 +38,7 @@ PRIMARY KEY (id)) engine=innodb default charset=utf8 ;')
 id bigint unsigned NOT NULL, \
 url varchar(1000) character set utf8, \
 title varchar(200) character set utf8,  \
+found_date bigint unsigned , \
 INDEX (id)) engine=innodb default charset=utf8 ;')
 
     data = cursor.fetchall()
