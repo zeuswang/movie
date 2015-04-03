@@ -146,3 +146,4 @@ db.commit()
 
 db.close()
 
+nowdate = int(time.strftime('%Y'))*10000 +　(int(time.strftime('%m')))*100 + int(time.strftime('%d'))

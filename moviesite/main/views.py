@@ -25,6 +25,59 @@ class Item:
         self.summary=""
         self.download_link=[]
 
+def get_newest_links(cursor):
+    time = datetime.datetime.now() - datetime.timedelta(days=7)
+    date7 = int(time.strftime('%Y'))*10000 +(int(time.strftime('%m')))*100 + int(time.strftime('%d'))
+
+
+    linkmap = {}
+    db = MySQLdb.connect(host = 'localhost', user='root',charset='utf8', passwd='zeus#1982',read_default_file='/etc/mysql/my.cnf')
+#cursor.execute('create database if not exists movie')
+#    cursor.execute('create database movie character set =utf8;')
+#    data = cursor.fetchall()
+#    print data
+    idlist = [it.id for it in itemlist ]
+    db.select_db('movie')
+    cursor = db.cursor()
+    sql = "select id,url,title,found_date from linkinfo where linkinfo > %d " %  date7
+    cursor.execute(sql)    
+    data = cursor.fetchall()
+    for li in data:
+        print li[0] 
+        print li[1]
+        print li[2].encode("utf-8")
+        if li[0] in linkmap:
+            linkmap[li[0]].append(li)
+        else:
+            linkmap[li[0]] = [li]
+    return linkmap
+    db.close()
+
+
+    linkmap = {}
+    db = MySQLdb.connect(host = 'localhost', user='root',charset='utf8', passwd='zeus#1982',read_default_file='/etc/mysql/my.cnf')
+#cursor.execute('create database if not exists movie')
+#    cursor.execute('create database movie character set =utf8;')
+#    data = cursor.fetchall()
+#    print data
+    idlist = [it.id for it in itemlist ]
+    db.select_db('movie')
+    cursor = db.cursor()
+    sql = "select id,url,title,found_date from linkinfo where id in(%s)" % (','.join(idlist)) 
+    cursor.execute(sql)    
+    data = cursor.fetchall()
+    for li in data:
+        print li[0] 
+        print li[1]
+        print li[2].encode("utf-8")
+        if li[0] in linkmap:
+            linkmap[li[0]].append(li)
+        else:
+            linkmap[li[0]] = [li]
+    return linkmap
+    db.close()
+
+
 def get_links(itemlist):
     linkmap = {}
     db = MySQLdb.connect(host = 'localhost', user='root',charset='utf8', passwd='zeus#1982',read_default_file='/etc/mysql/my.cnf')
