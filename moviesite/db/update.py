@@ -52,6 +52,7 @@ def update_data():
         it.location = flist[6]
         it.type = flist[7]
         strdate = flist[8]
+        it.date = 0
         if '-' in strdate:
             try:
                 numlist = strdate[0:10].split('-')
