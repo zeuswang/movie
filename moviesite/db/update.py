@@ -25,8 +25,8 @@ def update_link():
         it.mid = int(flist[0])
         it.url = flist[1]
         it.title = flist[2]
-        time = datetime.datetime.now()
-        it.found_date = int(time.strftime('%Y'))*10000 +int(time.strftime('%m'))*100 +int(time.strftime('%d'))
+        time = flist[3].split('-')
+        it.found_date = int(time[0])*10000 +int(time[1])*100 +int(time[2])
         itlist.append(it)
     havelist = Link.objects.filter(mid__in=[it.mid for it in itlist])
     linkmap = { i.url:i for i in havelist}
