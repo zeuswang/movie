@@ -4,6 +4,10 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 ROOTDIR = "/home/wangwei/moviesite/moviesite/"
 UPDATE_DIR = "/home/wangwei/online/mspider/data/"
+SPIDER_DIR = "/home/wangwei/online/mspider/script/"
+SPIDER_TEMPLATE = "/home/wangwei/online/mspider/conf/template"
+SEARCH_API_DIR = "/home/wangwei/moviesite/moviesite/search/"
+
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )

@@ -17,6 +17,8 @@ class Movie(models.Model):
     rate = models.IntegerField() 
     votes = models.BigIntegerField() 
     imdb_link  = models.URLField()
+    imdb_box  = models.IntegerField()
+    imdb_rate  = models.IntegerField()
     comment_link = models.URLField()
     douban_link = models.URLField()
     comment_link = models.URLField()
