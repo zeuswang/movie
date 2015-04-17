@@ -72,6 +72,8 @@ def update_data():
         it.votes=0
         if len(flist[11])>0:
             it.votes=int(flist[11])
+        if len(flist[12])>0:
+            it.pic_url = flist[12]
         print it.votes
         it.douban_link ="http://movie.douban.com/subject/"+flist[0]
         it.summary = flist[-1] 

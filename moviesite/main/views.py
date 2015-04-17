@@ -97,7 +97,7 @@ def hello(request):
 
     links = Link.objects.filter(mid__in=[it.mid for it in movies])
     for m in movies:
-        m.pic_url = 'photos/pic/'+ str(m.mid) +'.jpg'
+#        m.pic_url = 'photos/pic/'+ str(m.mid) +'.jpg'
         m.links=[]
         m.found_date = 0
         for link in links:
@@ -114,8 +114,8 @@ def hello(request):
         mlist.sort(key=lambda x:x.date,reverse=True)
     else:
         mlist.sort(key=lambda x:date_weight(x)*x.rate,reverse=True)
-    for m in mlist:
-        print m.cname,m.rate,m.date,date_weight(m),date_weight(m)*m.rate
+#    for m in mlist:
+#        print m.cname,m.rate,m.date,date_weight(m),date_weight(m)*m.rate
     context = {'mlist':mlist}
     return render(request, 'main/index.html', context)
 def type_filter(cc,type):
@@ -168,7 +168,7 @@ def content(request):
 
     links = Link.objects.filter(mid__in=[it.mid for it in movies])
     for m in movies:
-        m.pic_url = 'photos/pic/'+ str(m.mid) +'.jpg'
+        #m.pic_url = 'photos/pic/'+ str(m.mid) +'.jpg'
         m.links=[]
         m.found_date = 0
         for link in links:

@@ -1,0 +1,118 @@
+[
+{
+        "url": "http://banyungong.net/category/101.html",
+                "data": {
+                        "list": {
+                                "path": "table[class=tableList]#1,a",
+                                "link": {
+                                        "path": "a,attr@href"
+                                },
+                                "title": {
+                                        "path": "text"
+                                }
+                        }
+                }
+},
+{
+        "url": "banyungong.net/magnetm/",
+                "data": {
+                        "content": {
+                                "path": "div[id=Content],text"
+                                }
+                        }
+},
+{
+        "url": "http://gaoqing.la/.*html",
+                "data": {
+                        "content": {
+                                "path": "div[id=post_content],text"
+                                }
+                        }
+},
+
+{
+        "url": "http://gaoqing.la",
+        "data": {
+                "list": {
+                        "path": "div[class=post_hover]",
+                        "link": {
+                                "path": "a,attr@href"
+                        },
+                        "title": {
+                                "path": "text"
+                        }
+                }
+        }
+},
+{
+        "url": "http://movie.douban.com/subject_search?search_text=",
+        "data": {
+                "list": {
+                        "path": "div[class=article],div[class=pl2]",
+                        "link":{
+                            "path":"a,attr@href"
+                        },
+                        "info":{
+                            "path":"p[class=pl],text"
+                        },
+                        "title":{
+                            "path":"a,text"
+                        },
+                        "span":{
+                            "path":"a,span,text"
+                        }
+
+                }
+        }
+},
+{
+        "url": "http://www.imdb.com/title/",
+        "data": {
+                "name": {
+                        "path": "h1[class=header],text"
+                },
+                "typelist": {
+                        "path": "span[itemprop=genre]",
+                        "type":{
+                            "path":"text"
+                        }
+                },
+                "date": {
+                        "path": "meta[itemprop=datePublished],attr@content"
+                },
+
+               "pic_url": {
+                        "path": "td[id=img_primary],img,attr@src"
+                },
+
+                "rate": {
+                        "path": "span[itemprop=ratingValue],text"
+                },
+                "director":{
+                        "path": "div[itemprop=director],a,text"
+                },
+                "actors":{
+                        "path": "div[itemprop=actors],text"
+                },
+                "box": {
+                        "path": "div[class=txt-block],text"
+                }
+        }
+},
+{
+        "url": "http://www.imdb.com/find",
+        "data": {
+                "list": {
+                        "path": "div[class=findSection],table[class=findList],td[class=result_text]",
+                        "link": {
+                                "path": "a,attr@href"
+                        }
+                }
+
+                }
+}
+
+
+]
+
+
