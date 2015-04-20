@@ -45,7 +45,7 @@
         }
 },
 {
-        "url": "http://movie.douban.com/subject_search?search_text=",
+        "url": "http://movie.douban.com/subject_search",
         "data": {
                 "list": {
                         "path": "div[class=article],div[class=pl2]",

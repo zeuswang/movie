@@ -79,9 +79,16 @@ def get_imdb_movies(parser,mlist):
                     continue
                 dlist = parser.get_parse_data(url,page) 
                 print lurl
+                max_num =0 
                 for d in dlist['list']:
                     if 'title' in d['link']:
-                        res.append("http://www.imdb.com/"+ d['link'])
+                        imdburl = "http://www.imdb.com/"+ d['link']
+                        if '/?ref' in imdburl:
+                            imdburl = imdburl.split("/?ref")[0]
+                        res.append(imdburl)
+                        max_num +=1
+                        if max_num > 5:
+                            break
                     print d['link']
             time.sleep(1)
 
@@ -109,7 +116,7 @@ def get_douban_movies(parser,mlist):
                 lurl="http://movie.douban.com/subject_search?search_text="+m.ename
                 page=urllib.urlopen(lurl).read()
          #       print "xxx",lurl
-                dlist = parser.get_parse_data(url,page) 
+                dlist = parser.get_parse_data(url,page,debug=False) 
                 for d in dlist['list']:
                     res.append(d['link'])
             time.sleep(1)
@@ -249,9 +256,10 @@ if __name__ == "__main__":
         #mlist.append(t)
         urllist =[ [m.url,m.raw] for m in mlist]
         imdblist = get_imdb_movies(parser,mlist)
+        urllist.extend([[d,''] for d in imdblist])
+
         doubanurllist = get_douban_movies(parser,mlist)
         urllist.extend([[d,''] for d in doubanurllist])
-        urllist.extend([[d,''] for d in imdblist])
 
         fp = open(output_url,'w')
         for url in urllist:

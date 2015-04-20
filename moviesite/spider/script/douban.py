@@ -14,6 +14,8 @@ class Item:
     def __init__(self):
         self.id = ""
         self.url =""
+        self.raw = ""
+        self.content =""
         self.pic_url=""
         self.cname=""
         self.ename=""
