@@ -15,6 +15,7 @@ from  get_title import get_title,Title
 import traceback
 import datetime
 import Levenshtein
+import re
 def download_pic(url,id,dir):
     try:
         if not os.path.exists(dir):  
@@ -63,10 +64,9 @@ def get_imdb_movies(parser,mlist):
                 lurl="http://www.imdb.com/find?q="+m.ename
                 ok = False
                 page = ""
+                print "get imdb search",lurl
                 for i in range(0,3):
                     try:
-                        print lurl
-                        print m.ename
                         f=urllib.urlopen(lurl)
                         page = f.read()
                         ok =True
@@ -78,18 +78,24 @@ def get_imdb_movies(parser,mlist):
                 if ok ==False:
                     continue
                 dlist = parser.get_parse_data(url,page) 
-                print lurl
-                max_num =0 
-                for d in dlist['list']:
+                for d in dlist['list'][0:2]:
                     if 'title' in d['link']:
-                        imdburl = "http://www.imdb.com/"+ d['link']
-                        if '/?ref' in imdburl:
-                            imdburl = imdburl.split("/?ref")[0]
-                        res.append(imdburl)
-                        max_num +=1
-                        if max_num > 5:
-                            break
-                    print d['link']
+                        ti = d['title']
+                        if "(Video Game)" in ti or "(TV Episode)" in ti or "(TV Series)" in ti:
+                            continue
+                        p = re.compile(r'\(([\d]{4})\)') 
+                        match = p.search(ti)
+                        year = ""
+                        if match != None:
+                            year = match.group().strip('()') 
+                            if abs(int(year)  - int(m.year)) <=1: 
+                                imdburl = "http://www.imdb.com"+ d['link']
+                                if '/?ref' in imdburl:
+                                    imdburl = imdburl.split("/?ref")[0]
+                                print "find:",m.raw
+                                print "imdb:",imdburl,ti
+                            res.append(imdburl)
+                    #print d['link']
             time.sleep(1)
 
         except Exception,e:
@@ -100,6 +106,55 @@ def get_imdb_movies(parser,mlist):
             print "ERROR:get imdb ",m.ename,"//",m.cname
             continue
     return res
+
+def crawl_timeout(url,timeout,trynum):
+
+    to = timeout
+    ok = False
+    page = ""
+    err =0
+    for i in range(0,trynum):
+
+        socket.setdefaulttimeout(to)
+        try:
+            time.sleep(1)
+            f=urllib.urlopen(url)
+            page = f.read()
+            ok =True
+            break
+        except Exception,e:
+            print e
+            print "timeout xxxx"
+            err +=1
+            if err ==1:
+                time.sleep(2)
+                to = 30
+            elif err >1:
+                time.sleep(5)
+                to = 60
+
+            continue
+
+    if ok ==True:
+        return page
+    else:
+        return None
+def is_maybe_ok(d,m):
+    flist = d['info'].strip().split('/')
+    date = flist[0][0:4]
+    p = re.compile(r'[\d]{4}') 
+    #print "date",date
+    #print "m.year",m.year
+    #print d['rate']
+    match = p.search(date)
+    if match != None:
+        #print "douban date",date,m.year
+        if abs(int(date) - int(m.year)) >1:
+            return False
+    if d['rate']== None:
+        return False
+
+    return True
 
 
 def get_douban_movies(parser,mlist):
@@ -114,18 +169,32 @@ def get_douban_movies(parser,mlist):
             url="http://movie.douban.com/subject_search?search_text="
             if len(m.ename)>0:
                 lurl="http://movie.douban.com/subject_search?search_text="+m.ename
-                page=urllib.urlopen(lurl).read()
-         #       print "xxx",lurl
+                print "get douban",lurl
+                page = crawl_timeout(lurl,15,3)
+                if page ==None:
+                    print "ERROR,timeout,douban,url=",lurl
+                    continue
                 dlist = parser.get_parse_data(url,page,debug=False) 
                 for d in dlist['list']:
-                    res.append(d['link'])
+                    if is_maybe_ok(d,m):
+                        print "find:",m.raw
+                        print "douban:",d['link'],d['title']
+                        res.append(d['link'])
+ 
             time.sleep(1)
             lurl="http://movie.douban.com/subject_search?search_text="+m.cname
-            page=urllib.urlopen(lurl).read()
+            print "get douban",lurl
+            page = crawl_timeout(lurl,15,3)
+            if page ==None:
+                print "ERROR,timeout,douban,url=",lurl
+                continue
          #       print "xxx",lurl
             dlist = parser.get_parse_data(url,page) 
             for d in dlist['list']:
-                res.append(d['link'])
+                if is_maybe_ok(d,m):
+                    print "find:",m.raw
+                    print "douban:",d['link'],d['title']
+                    res.append(d['link'])
             time.sleep(1)
 
 
@@ -266,38 +335,6 @@ if __name__ == "__main__":
             fp.write(url[0]+'\t'+url[1]+'\n')
         fp.flush()
         fp.close()
-#        
-#        for m in mlist:
-#            print "INFO:",m.cname,"////",m.ename,"/////",m.year
-#            it,dtitle = get_douban_movie(parser,m)
-#            if it != None: 
-#                print "INFO:",m.raw
-#                print "INFO:",dtitle
-#                if it.id not in mmap:
-#                    mmap[it.id] = it
-#    
-#                item = mmap[it.id]
-#                item.download_link.append([m.url,m.raw])
-#                time.sleep(1)
-#                download_pic(item.pic_url,item.id,pic_dir)
-#                time.sleep(1)
-#            time.sleep(1)
-#    #    print mmap
-#        fp = open(output_movie,'w')
-#        for k,it in mmap.items():
-#            str = '%s\3%s\3%s\3%s\3%s\3%s\3%s\3%s\3%s\3%s\3%s\3%s\3%s\3%s\3%s\3%s\3%s\n' % (it.id,it.cname,it.ename,it.actors,it.director,it.writer,it.location,it.type,it.date,it.runtime,it.rate,it.votes,it.pic_url,it.aname,it.imdb_link,it.comment_link,it.summary)
-#            fp.write(str)
-#        fp.close()
-#        time = datetime.datetime.now()
-#        datestr = time.strftime('%Y-%m-%d')
-#        fp = open(output_link,'w')
-#        for k,v in mmap.items():
-#    #        print k
-#            
-#            for dl in v.download_link:
-#                str = '%s\3%s\3%s\3%s\n' % (k,dl[0],dl[1],datestr)
-#                fp.write(str)
-#        fp.close()
     except Exception,e:
-        print traceback.print_exc()
+        traceback.print_exc(sys.stdout)
         print e

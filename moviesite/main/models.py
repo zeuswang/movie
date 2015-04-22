@@ -13,6 +13,8 @@ class Movie(models.Model):
     location = models.CharField(max_length=100)
     type = models.CharField(max_length=200)
     runtime = models.CharField(max_length=100)
+
+    channel  = models.IntegerField(default=0)
     date = models.BigIntegerField() 
     rate = models.IntegerField() 
     votes = models.BigIntegerField() 
@@ -48,7 +50,7 @@ class Imdb(models.Model):
 class Link(models.Model):
     #mid = models.ForeignKey('Movie')
     mid = models.BigIntegerField(db_index=True)
-    urlmd5 = models.CharField(max_length=32,db_index=True)
+    urlmd5 = models.CharField(max_length=32,db_index=True,unique=True)
     url = models.URLField()
     title = models.CharField(max_length=255)
     cname = models.CharField(max_length=100)

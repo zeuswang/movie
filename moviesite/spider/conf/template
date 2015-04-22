@@ -60,7 +60,14 @@
                         },
                         "span":{
                             "path":"a,span,text"
+                        },
+                        "rate":{
+                            "path":"span[class=rating_nums],text"
+                        },
+                        "votes":{
+                            "path":"span[class=pl],text"
                         }
+
 
                 }
         }
@@ -69,7 +76,7 @@
         "url": "http://www.imdb.com/title/",
         "data": {
                 "name": {
-                        "path": "h1[class=header],text"
+                        "path": "meta[property='og:title'],attr@content"
                 },
                 "typelist": {
                         "path": "span[itemprop=genre]",
@@ -106,7 +113,11 @@
                         "path": "div[class=findSection],table[class=findList],td[class=result_text]",
                         "link": {
                                 "path": "a,attr@href"
+                        },
+                        "title": {
+                                "path": "text"
                         }
+
                 }
 
                 }

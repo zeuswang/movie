@@ -17,6 +17,7 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'moviesite.settings'
 #settings.configure()
 from main.models import Movie,Link,Imdb
 import hashlib
+import traceback
 
 def get_md5_value(src):
     myMd5 = hashlib.md5()
@@ -27,121 +28,186 @@ def get_md5_value(src):
 def update_link(linklist):
     itlist = []
     for info in linklist:
+
         it = Link()
-        it.url = info.url
-        it.urlmd5 = get_md5_value(info.url) 
-        it.cname = info.cname
-        it.ename = info.ename
-        it.actors = info.actors
-        it.director = info.director
-        it.date = info.date
-        it.title = info.raw
-        it.content = info.content
-        time = datetime.datetime.now()
-        it.found_date = int(time.strftime('%Y'))*+int(time.strftime('%m'))*100 +int(time.strftime('%d'))
+        try:
+            it.url = info.url
+            it.urlmd5 = get_md5_value(info.url) 
+            it.cname = info.cname
+            it.ename = info.ename
+            it.actors = info.actors
+            it.director = info.director
+            it.date = info.date
+            it.title = info.raw
+            it.content = info.content
+            time = datetime.datetime.now()
+            it.found_date = int(time.strftime('%Y'))*10000+int(time.strftime('%m'))*100 +int(time.strftime('%d'))
+
+        except Exception,e:
+            print traceback.print_exc()  
+            print "ERROR:",e
+            print "UPDATE ERROR:url=",info.url,info.raw
+            continue
 
         itlist.append(it)
-    havelist = Link.objects.filter(mid__in=[it.urlmd5 for it in itlist])
-    linkmap = { i.url:i for i in havelist}
-    for it in itlist:
-        if it.url not in linkmap:
-            it.save()
+
+    try:
+        havelist = Link.objects.filter(urlmd5__in=[it.urlmd5 for it in itlist])
+        linkmap = { i.url:i for i in havelist}
+        for it in itlist:
+            if it.url not in linkmap:
+                it.save()
+    except Exception,e:
+        print traceback.print_exc()  
+        print "ERROR:",e
+        return False
+
 
 
 def update_douban(doubanlist):
     mlist = []
     for it in doubanlist:
+
         m = Movie()
-        m.mid = it.id
-        m.cname = it.cname
-        m.ename = it.ename
-        m.actors = it.actors
-        m.director = it.director
-        m.nation = it.nation
-        m.location = it.location
-        m.type = it.type
-        strdate = it.date
-        m.date = 0
-        if '-' in strdate:
-            try:
-                numlist = strdate[0:10].split('-')
-                m.date = int(numlist[0])*10000 +int(numlist[1])*100 +int(numlist[2])
-            except:  
-                m.date = 0
-        elif len(strdate)>=4:
-            try:
-                m.date = int(strdate[0:4])*10000
-            except:
-                m.date =0
-                    
-        m.rate=0
-        if len(it.rate)>0:
-            m.rate=int(float(it.rate)*10)
-        print m.rate
-        m.votes=0
-        if len(it.votes)>0:
-            m.votes=int(it.votes)
-        if len(it.pic_url)>0:
-            m.pic_url = it.pic_url
-        print it.votes
-        m.douban_link ="http://movie.douban.com/subject/"+it.id
-        m.summary = it.summary
-        m.imdb_link = it.imdb_link
-        m.comment_link = it.comment_link
-        print "reviews",m.comment_link
-        print "summary",m.summary
-        time = datetime.datetime.now()
-        m.found_date = int(time.strftime('%Y'))*+int(time.strftime('%m'))*100 +int(time.strftime('%d'))
+        try:
+            if it.channel ==1:
+                continue
+            m.mid = int(it.id)
+            m.url = it.url
+            m.cname = it.cname
+            m.ename = it.ename
+            m.actors = it.actors
+            m.director = it.director
+            m.nation = it.nation
+            m.location = it.location
+            m.type = it.type
+            strdate = it.date
+            m.date = 0
+            if '-' in strdate:
+                try:
+                    numlist = strdate[0:10].split('-')
+                    m.date = int(numlist[0])*10000 +int(numlist[1])*100 +int(numlist[2])
+                except:  
+                    m.date = 0
+            elif len(strdate)>=4:
+                try:
+                    m.date = int(strdate[0:4])*10000
+                except:
+                    m.date =0
+                        
+            m.rate=0
+            if len(it.rate)>0:
+                m.rate=int(float(it.rate)*10)
+            print m.rate
+            m.votes=0
+            if len(it.votes)>0:
+                m.votes=int(it.votes)
 
-   
-        m.runtime = it.runtime
+            if len(it.pic_url)>5:
+                m.pic_url = it.pic_url
+            else:
+                m.pic_url ="nopic";
+            print it.votes
+            m.douban_link ="http://movie.douban.com/subject/"+it.id
+            m.summary = it.summary
+            m.imdb_link = it.imdb_link
+            m.comment_link = it.comment_link
+            print "reviews",m.comment_link
+            print "summary",m.summary
+            time = datetime.datetime.now()
+            m.found_date = int(time.strftime('%Y'))*10000+int(time.strftime('%m'))*100 +int(time.strftime('%d'))
+
+       
+            m.runtime = it.runtime
+        except Exception,e:
+            traceback.print_exc(sys.stdout)  
+            print "ERROR:",e
+            print "UPDATE ERROR: url=",it.url,it.raw
+            continue
+
         mlist.append(m)
-    
-    havein = Movie.objects.filter(mid__in=[it.mid for it in mlist ])
-    midmap = { it.mid:1 for it in havein }
 
-    for m in mlist:
-        if m.mid not in midmap:
-            m.save()
+
+
+    try: 
+        havein = Movie.objects.filter(mid__in=[it.mid for it in mlist ])
+        midmap = { it.mid:1 for it in havein }
+
+        for m in mlist:
+            if m.mid not in midmap:
+                m.save()
+    except Exception,e:
+        print traceback.print_exc()  
+        print "ERROR:",e
+        return False
+
+
  
 def update_imdb(imdblist):
     mlist = []
     for it in imdblist:
-        m = Imdb()
-        m.mid = it.id
-        time = datetime.datetime.now()
-        m.found_date = int(time.strftime('%Y'))*+int(time.strftime('%m'))*100 +int(time.strftime('%d'))
- 
-        m.cname = it.cname
-        m.ename = it.ename
-        m.actors = it.actors
-        m.director = it.director
-        strdate = it.date
-        m.date = 0
-        if '-' in strdate:
-            try:
-                numlist = strdate[0:10].split('-')
-                m.date = int(numlist[0])*10000 +int(numlist[1])*100 +int(numlist[2])
-            except:  
-                m.date = 0
-        elif len(strdate)>=4:
-            try:
-                m.date = int(strdate[0:4])*10000
-            except:
-                m.date =0
-                    
-        m.box=int(it.box)
-        m.pic_url = it.pic_url
-        m.box = int(it.box)
-        m.rate = int(it.rate*100)
-        mlist.append(m)
-    
-    havein = Movie.objects.filter(mid__in=[it.mid for it in mlist ])
-    midmap = { it.mid:1 for it in havein }
 
-    for m in mlist:
-        if m.mid not in midmap:
-            m.save()
+        m = Imdb()
+        try:
+            m.mid = it.id
+            m.url = it.url
+            time = datetime.datetime.now()
+            m.found_date = int(time.strftime('%Y'))*10000+int(time.strftime('%m'))*100 +int(time.strftime('%d'))
+     
+            m.cname = it.cname
+            m.ename = it.ename
+            m.actors = it.actors
+            m.director = it.director
+            strdate = it.date
+            m.date = 0
+            if '-' in strdate:
+                try:
+                    numlist = strdate[0:10].split('-')
+                    m.date = int(numlist[0])*10000 +int(numlist[1])*100 +int(numlist[2])
+                except:  
+                    m.date = 0
+            elif len(strdate)>=4:
+                try:
+                    m.date = int(strdate[0:4])*10000
+                except:
+                    m.date =0
+                        
+            m.box=int(it.box)
+            m.pic_url = it.pic_url
+            if m.pic_url ==None or len(m.pic_url)<4:
+                m.pic_url = "nopic"
+
+            m.box = int(it.box)
+            print "rate=",it.rate 
+            m.rate = int(float(it.rate)*10)
+
+        except Exception,e:
+            traceback.print_exc(sys.stdout)  
+            print "UPDATE ERROR:",e
+            print "UPDATE ERROR: url=",it.url,it.raw
+            continue
+
+        mlist.append(m)
+
+    try:    
+        havein = Imdb.objects.filter(mid__in=[it.mid for it in mlist ])
+        print "havein",havein
+        midmap = { it.mid:1 for it in havein }
+    
+        for m in mlist:
+            if m.mid not in midmap:
+                print "mid",m.mid
+                try:
+                    m.save()
+                except Exception,e:
+                    traceback.print_exc(sys.stdout)  
+                    print "ERROR:url=",m.url
+                    continue
+    except Exception,e:
+        traceback.print_exc(sys.stdout)  
+        print "ERROR:",e
+        return False
+
  
 def banyungong_parse(url,res):
     con = res['content']
@@ -199,6 +265,7 @@ def crawl_timeout(url,timeout,trynum):
             break
         except Exception,e:
             print e
+            print "timeout xxxx"
             continue
 
     if ok ==True:
@@ -210,11 +277,11 @@ def imdb_parse(url,res):
     it = Item()
     it.url = url
     con = res
-
     ename =  con['name']
-    if len(ename)>0:
+    if ename!=None and len(ename)>0:
         it.ename = ename.split("(")[0].strip()
-        it.date = ename.split("(")[1].split(")")[0].strip()
+    else:
+        return None,[]
     tlist = []
     for t in con['typelist']:
         tlist.append(t['type'])
@@ -222,15 +289,20 @@ def imdb_parse(url,res):
     it.type = '/'.join(tlist)
     imdbid = url.split("title/")[1].split("/")[0]
     if "tt" in imdbid:
-        imdbid.replace("tt",'')
+        imdbid = imdbid.replace('tt','')
     it.id = int(imdbid)
 ##title/tt0061811
     it.date = con['date']
-    print "imdbid",it.mid
+    print "imdbname",it.ename
+    print "imdbid",it.id
     print "imdb" ,it.type
     print "year",con['date']
     it.pic_url = con['pic_url']
+    if it.pic_url ==None:
+        it.pic_url="nopic"
     it.rate = con['rate']
+    if it.rate==None:
+        it.rate=0
     it.director = con['director']
     it.actors = con['actors']
     info =  con['box']
@@ -266,6 +338,8 @@ if __name__ == "__main__":
     for line in open(file,'r'):
         urllist = line.strip().split('\t')
         url = urllist[0]
+        if len(url)<3:
+            continue
         if "douban" in url:
             if url not in doubanurlmap:
                 doubanurlmap[url]=1
@@ -274,60 +348,91 @@ if __name__ == "__main__":
             if url not in  imdburlmap:
                 imdburlmap[url]=1
             continue
+        try:
+            print "craw0",url
+            page=crawl_timeout(url,15,3)
+         #       print "xxx",lurl
+            if page ==None:
+                print "ERROR:",url
+            else: 
+                res = parser.get_parse_data(url,page) 
+                it,urls = parse_result(url,res)
+                if it!=None:
+                    it.raw = urllist[1]
+                    detaillist.append(it)
+                    if "douban" in url:
+                        if url not in doubanurlmap:
+                            doubanurlmap[url]=1
+                    elif "imdb" in url:
+                        if url not in  imdburlmap:
+                            imdburlmap[url]=1
+        except Exception,e:
+            print traceback.print_exc()  
+            print "ERROR:",e
+            print "ERROR:url=",url
+            continue
 
-        print "craw0",url
-        page=crawl_timeout(url,15,3)
-     #       print "xxx",lurl
-        if page ==None:
-            print "ERROR:",url
-        else: 
-            res = parser.get_parse_data(url,page) 
-            it,urls = parse_result(url,res)
-            if it!=None:
-                it.raw = urllist[1]
-                detaillist.append(it)
-                if "douban" in url:
-                    if url not in doubanurlmap:
-                        doubanurlmap[url]=1
-                elif "imdb" in url:
-                    if url not in  imdburlmap:
-                        imdburlmap[url]=1
         time.sleep(1)
 
 
     itemlist = [] 
-    for url in doubanurlmap:
+    for url,v in doubanurlmap.items():
+        print "get douban page"
+        print "url = ",url
+        try:
+            page=crawl_timeout(url,30,3)
+            if page ==None:
+                print "ERROR:",url
+            else:
+                if "douban" in url:
+                    item = douban.get_result(url) 
+                    if item !=None:
+                        detaillist.append(item)
+                        if "imdb" in item.imdb_link and item.imdb_link not in imdburlmap:
+                            imdburlmap[item.imdb_link]=1
+        except Exception,e:
+            print traceback.print_exc()  
+            print "ERROR:",e
+            print "ERROR:url=",url
+            continue
 
-        page=crawl_timeout(url,30,3)
-        if page ==None:
-            print "ERROR:",url
-        else:
-            if "douban" in url:
-                item = douban.get_result(url) 
-                if item !=None:
-                    detaillist.append(item)
-                    if "imdb" in item.imdb_link and item.imdb_link not in imdburlmap:
-                        imdburlmap[url]=1
+
 
         time.sleep(1)
 
-    for url in imdburlmap:
-
-        page=crawl_timeout(url,30,3)
-        if page ==None:
-            print "ERROR:",url
-        else:
-            res = parser.get_parse_data(url,page,debug=False) 
-            it,urls = parse_result(url,res)
-            if it!=None:
-                detaillist.append(it)
+    for url,v in imdburlmap.items():
+        print "get imdburl"
+        print "url =",url
+        try:
+            page=crawl_timeout(url,30,3)
+            if page ==None:
+                print "ERROR:",url
+            else:
+                res = parser.get_parse_data(url,page) 
+                it,urls = parse_result(url,res)
+                if it!=None:
+                    detaillist.append(it)
+        except Exception,e:
+            print traceback.print_exc()  
+            print "ERROR:",e
+            print "ERROR:url=",url
+            continue
 
         time.sleep(1)
 
 
 #    for d in detaillist:
 #        print d.url,d.cname,d.ename
+    insertdoubanlist = []
+    insertimdblist = []
+    insertlinklist = []
     for d in detaillist:
+        if "douban" in d.url:
+            insertdoubanlist.append(d)
+        elif "imdb" in d.url:
+            insertimdblist.append(d)
+        else:
+            insertlinklist.append(d)
         print d.url
         print d.raw
         print d.pic_url
@@ -341,4 +446,9 @@ if __name__ == "__main__":
         print d.box
         print d.content
 
+
+    print "begin to update db"
+    update_link(insertlinklist)
+    update_douban(insertdoubanlist)
+    update_imdb(insertimdblist)
 

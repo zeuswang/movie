@@ -21,6 +21,7 @@ class Item:
         self.ename=""
         self.aname=""
         self.actors=""
+        self.channel=0
         self.director=""
         self.writer=""
         self.location=""
@@ -73,7 +74,8 @@ class DoubanParser(PageParser):
                     for t in tl:
                         it.type += '/' +pyq(t).text().encode("UTF-8")
 
-
+                    if "集数" in info or "单集片长" in info:
+                        it.channel =1
                     idx = str(info).find("编剧")
                     idx2 = str(info).find("主演")
                     if idx >0 and idx2 >0:

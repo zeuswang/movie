@@ -42,18 +42,24 @@ class Parser:
                 if node.text() != None:
                     value = node.text().encode("utf-8")
                 else:
-                    value ="NULL"
+                    value = None
                 return value
             elif '#' in p:
                 pl = p.split('#')    
                 print pl[0],pl[1]
                 node = node(pl[0].encode("utf-8")).eq(int(pl[1]))
-                node = pyq(node)
+                if node !=None:
+                    node = pyq(node)
+                else:
+                    return None
             else:
                 
                 node = node(p.encode("utf-8"))
+                if node!=None:
                 #node = pyq(node)(p)
-                node = pyq(node)
+                    node = pyq(node)
+                else:
+                    return None
             if debug:
                 print "DEBUG,p",p
                 print node
@@ -98,9 +104,7 @@ class Parser:
             p = re.compile(k) 
             match = p.search(url)
             if match != None:
-                tt =  match.group()
-                print tt
-                print url
+                #tt =  match.group()
                 template = v
                 return self._get_data(page,template,debug)
         return []
@@ -116,7 +120,7 @@ def parse_detail(parser,t):
 
     res =  parser.get_parse_data(t.url,page)
     time.sleep(1)
-    print res['content']
+    #print res['content']
     if "banyungong" in t.url:
         banyungong_parse_detail(t,res)
     elif "gaoqing.la" in t.url:
