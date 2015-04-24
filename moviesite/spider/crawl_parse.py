@@ -18,7 +18,7 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'moviesite.settings'
 from main.models import Movie,Link,Imdb
 import hashlib
 import traceback
-
+import re
 def get_md5_value(src):
     myMd5 = hashlib.md5()
     myMd5.update(src)
@@ -31,31 +31,31 @@ def update_link(linklist):
 
         it = Link()
         try:
+            it.mid = 0
             it.url = info.url
             it.urlmd5 = get_md5_value(info.url) 
             it.cname = info.cname
             it.ename = info.ename
             it.actors = info.actors
             it.director = info.director
-            it.date = info.date
+            it.date = get_date_from_string(info.date)
             it.title = info.raw
             it.content = info.content
             time = datetime.datetime.now()
             it.found_date = int(time.strftime('%Y'))*10000+int(time.strftime('%m'))*100 +int(time.strftime('%d'))
-
         except Exception,e:
             print traceback.print_exc()  
-            print "ERROR:",e
-            print "UPDATE ERROR:url=",info.url,info.raw
+            print "UPDATE LINK ERROR:",e
+            print "UPDATE LINK ERROR:url=",info.url,info.raw
             continue
 
         itlist.append(it)
 
     try:
         havelist = Link.objects.filter(urlmd5__in=[it.urlmd5 for it in itlist])
-        linkmap = { i.url:i for i in havelist}
+        linkmap = { i.urlmd5:i for i in havelist}
         for it in itlist:
-            if it.url not in linkmap:
+            if it.urlmd5 not in linkmap:
                 it.save()
     except Exception,e:
         print traceback.print_exc()  
@@ -70,6 +70,7 @@ def update_douban(doubanlist):
 
         m = Movie()
         try:
+            print "channel",it.channel
             if it.channel ==1:
                 continue
             m.mid = int(it.id)
@@ -78,27 +79,16 @@ def update_douban(doubanlist):
             m.ename = it.ename
             m.actors = it.actors
             m.director = it.director
-            m.nation = it.nation
             m.location = it.location
             m.type = it.type
-            strdate = it.date
-            m.date = 0
-            if '-' in strdate:
-                try:
-                    numlist = strdate[0:10].split('-')
-                    m.date = int(numlist[0])*10000 +int(numlist[1])*100 +int(numlist[2])
-                except:  
-                    m.date = 0
-            elif len(strdate)>=4:
-                try:
-                    m.date = int(strdate[0:4])*10000
-                except:
-                    m.date =0
-                        
+            m.date = get_date_from_string(it.date)
+            if m.date ==0:
+                continue
             m.rate=0
             if len(it.rate)>0:
                 m.rate=int(float(it.rate)*10)
-            print m.rate
+            if m.rate ==0:
+                continue
             m.votes=0
             if len(it.votes)>0:
                 m.votes=int(it.votes)
@@ -141,6 +131,34 @@ def update_douban(doubanlist):
         print "ERROR:",e
         return False
 
+def get_date_from_string(sdate):
+    if sdate == None:
+        return 0
+    p = re.compile(r'([\d]{4}-[\d]{2}-[\d]{2})') 
+    strdate = ""
+    match = p.search(sdate)
+    if match != None:
+        strdate = match.group()
+    else:
+        p = re.compile(r'([\d]{4})') 
+        match = p.search(sdate)
+        if match != None:
+            strdate = match.group()
+
+    date = 0
+    print "strdate=",strdate
+    if '-' in strdate:
+        try:
+            numlist = strdate[0:10].split('-')
+            date = int(numlist[0])*10000 +int(numlist[1])*100 +int(numlist[2])
+        except:  
+            date = 0
+    elif len(strdate)>=4:
+        try:
+            date = int(strdate[0:4])*10000
+        except:
+            date =0
+    return date
 
  
 def update_imdb(imdblist):
@@ -158,27 +176,14 @@ def update_imdb(imdblist):
             m.ename = it.ename
             m.actors = it.actors
             m.director = it.director
-            strdate = it.date
-            m.date = 0
-            if '-' in strdate:
-                try:
-                    numlist = strdate[0:10].split('-')
-                    m.date = int(numlist[0])*10000 +int(numlist[1])*100 +int(numlist[2])
-                except:  
-                    m.date = 0
-            elif len(strdate)>=4:
-                try:
-                    m.date = int(strdate[0:4])*10000
-                except:
-                    m.date =0
-                        
+            m.type = it.type
+            m.date = get_date_from_string(it.date)
             m.box=int(it.box)
             m.pic_url = it.pic_url
             if m.pic_url ==None or len(m.pic_url)<4:
                 m.pic_url = "nopic"
 
             m.box = int(it.box)
-            print "rate=",it.rate 
             m.rate = int(float(it.rate)*10)
 
         except Exception,e:
@@ -191,12 +196,10 @@ def update_imdb(imdblist):
 
     try:    
         havein = Imdb.objects.filter(mid__in=[it.mid for it in mlist ])
-        print "havein",havein
         midmap = { it.mid:1 for it in havein }
     
         for m in mlist:
             if m.mid not in midmap:
-                print "mid",m.mid
                 try:
                     m.save()
                 except Exception,e:
@@ -227,16 +230,20 @@ def banyungong_parse(url,res):
             if "国　　家" in s:
                 it.location = s.split("国　　家")[1].strip()
             if "上映时期" in s:
+                it.date = s.split("上映时期")[1].strip()
+            elif "上映日期" in s:
                 it.date = s.split("上映日期")[1].strip()
             if "链接" in s:
                 u = s.split("链接")[1].strip()
                 if "http://" in u:
                     pos = u.find("http://")
-                    newurl.append(u[pos:])
+                    newurl.append((u[pos:]).strip('/'))
             if "导　　演" in s:
                 it.director = s.split("导　　演")[1].strip()
             if "主　　演" in s:
                 it.actors = s.split("主　　演")[1].strip()
+            elif "演　　员" in s:
+                it.actors = s.split("演　　员")[1].strip()
     else:
         it = Item()
         it.url = url
@@ -305,12 +312,15 @@ def imdb_parse(url,res):
         it.rate=0
     it.director = con['director']
     it.actors = con['actors']
+    if it.actors ==None:
+        return None,[]
+    it.actors = it.actors.split("|")[0].replace("Stars:",'').strip()
     info =  con['box']
 #    Budget: $170,000,000 (estimated)
     if "Budget:" in info:
         box = info.split("Budget: $")[1].split("(estimated)")[0]
         box = box.replace(",",'').strip()
-        it.box = box
+        it.box = int(box)/10000
     return it,[] 
 
 
@@ -387,6 +397,7 @@ if __name__ == "__main__":
                 if "douban" in url:
                     item = douban.get_result(url) 
                     if item !=None:
+                        item.url = url
                         detaillist.append(item)
                         if "imdb" in item.imdb_link and item.imdb_link not in imdburlmap:
                             imdburlmap[item.imdb_link]=1
@@ -411,6 +422,7 @@ if __name__ == "__main__":
                 res = parser.get_parse_data(url,page) 
                 it,urls = parse_result(url,res)
                 if it!=None:
+                    it.url = url
                     detaillist.append(it)
         except Exception,e:
             print traceback.print_exc()  
@@ -448,6 +460,9 @@ if __name__ == "__main__":
 
 
     print "begin to update db"
+    print "link to update",len(insertlinklist)
+    print "douban to update",len(insertdoubanlist)
+    print "imdb to update",len(insertimdblist)
     update_link(insertlinklist)
     update_douban(insertdoubanlist)
     update_imdb(insertimdblist)

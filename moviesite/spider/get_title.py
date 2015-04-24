@@ -33,6 +33,7 @@ class Title:
         self.cname = ""
         self.ename = ""    
         self.year = ""
+        self.rate = ""
         self.detail_info = DetailInfo()
 
 def gaoqing_title(url,name):
