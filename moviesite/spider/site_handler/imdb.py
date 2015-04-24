@@ -1,10 +1,12 @@
 #!/usr/bin/env python
 # encoding: utf-8
-import site_handler
+import sys
+sys.path.append("..")
+from base import SiteHandler
 import utils
 import sys
 import os
-from douban import Item
+from common import Item
 from get_title import Title,get_title
 import traceback
 reload(sys)
@@ -14,12 +16,10 @@ sys.path.append(homedir)
 os.environ['DJANGO_SETTINGS_MODULE'] = 'moviesite.settings'
 import re
 from main.models import Movie,Link,Imdb
-class imdb_handler(site_handler.SiteHandler):
+class imdb_handler(SiteHandler):
 
     """Docstring for . """
 
-    def __init__(self):
-        """TODO: to be defined1. """
 
     def detail_parse_by_subclass(self,url,page):
         it = Item()
@@ -61,7 +61,7 @@ class imdb_handler(site_handler.SiteHandler):
         if "Budget:" in info:
             box = info.split("Budget:")[1].split("(estimated)")[0]
             box = box.replace(",",'').strip()
-            p = re.compile(r'([\d]+))') 
+            p = re.compile(r'([\d]+)') 
             match = p.search(box)
             if match != None:
                 it.box = int(match.group())/10000
@@ -87,6 +87,9 @@ class imdb_handler(site_handler.SiteHandler):
                     if '/?ref' in imdburl:
                         imdburl = imdburl.split("/?ref")[0]
                         title.url = imdburl
+                        title.raw = d['title']
+                        print "imdb",title.url
+                        print title.year
                         res.append(title)
         return res
 

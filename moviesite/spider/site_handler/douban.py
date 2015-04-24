@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 # encoding: utf-8
-import site_handler
-import utils
 import sys
+sys.path.append("..")
+from base import SiteHandler
+import utils
 import os
 from common import Item
 from get_title import Title,get_title
@@ -18,16 +19,17 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'moviesite.settings'
 from main.models import Movie,Link,Imdb
 import re
 
-class douban_handler(site_handler.SiteHandler):
+class douban_handler(SiteHandler):
 
     """Docstring for . """
 
-    def __init__(self):
-        """TODO: to be defined1. """
 
     def detail_parse_by_subclass(self,url,page):
         it = Item()
         newurl = []
+        flist = url.split('/')
+        it.id = flist[-1]
+
         #print page
         doc = pyq(page)
         tmp = doc('div[id=info]')

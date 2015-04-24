@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # encoding: utf-8
-import site_handler
+import sys
+sys.path.append("..")
+from base import SiteHandler
 import utils
 import sys
 import os
@@ -15,12 +17,10 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'moviesite.settings'
 
 from main.models import Movie,Link,Imdb
 
-class gaoqing_handler(site_handler.SiteHandler):
+class gaoqing_handler(SiteHandler):
 
     """Docstring for . """
 
-    def __init__(self):
-        """TODO: to be defined1. """
 
     def detail_parse_by_subclass(self,url,page):
         res =  self.parser.get_parse_data(url,page)

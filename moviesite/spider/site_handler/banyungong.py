@@ -1,10 +1,13 @@
 #!/usr/bin/env python
 # encoding: utf-8
-import site_handler
-import utils
+
 import sys
+#sys.path.append("../")
+import utils
+from   base import SiteHandler
+#import  site_handler.site_handler 
 import os
-from douban import Item
+from common import Item
 from get_title import Title,get_title
 import traceback
 reload(sys)
@@ -14,12 +17,10 @@ sys.path.append(homedir)
 os.environ['DJANGO_SETTINGS_MODULE'] = 'moviesite.settings'
 
 from main.models import Movie,Link,Imdb
-class banyungong_handler(site_handler.SiteHandler):
+class banyungong_handler(SiteHandler):
 
     """Docstring for . """
 
-    def __init__(self):
-        """TODO: to be defined1. """
 
     def detail_parse_by_subclass(self,url,page):
 

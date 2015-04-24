@@ -1,4 +1,4 @@
-#!/usr/bin python
+#rt's War (2002)!/usr/bin python
 # coding=utf8
 import os
 import string
@@ -10,9 +10,9 @@ gaoqing_remove_pattern_list = [r'\[.*\]+.*',
 
 banyungong_remove_pattern_list = [r'\[[^\[\]]+\]{1}',
                                 r'.*[\d]{4}年' ]
-banyungong_pattern_list = [r'([a-zA-Z0-9\.]+[0-9]{4}\.)',
+banyungong_pattern_list = [r'([\w\d\.]+[0-9]{4}\.)',
                            r'([\w\d\s]+[0-9]{4}\s)',
-                            r'([\w\d\s]+\([0-9]{4}\))']
+                            r'([\w\d\s\']+\([0-9]{4}\))']
 
 common_pattern_list = [r'[二两三四五六七八九十一]+部曲',
                         r'全集',
@@ -77,9 +77,10 @@ def banyungong_title(name):
         m = p.findall(s)
         if len(m) >0:
             tt =  m[-1]
+            print "tt",tt
             pos = s.find(tt)
             cname = s[0:pos]
-            ename =  tt[0:(len(tt) -6)]
+            ename =  tt[0:(len(tt) -6)].strip()
             year = tt[len(tt) -5:len(tt)-1]
             break
         
