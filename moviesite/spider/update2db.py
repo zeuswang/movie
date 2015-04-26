@@ -315,7 +315,11 @@ if __name__ == "__main__":
     print "link to update",len(insertlinklist)
     print "douban to update",len(insertdoubanlist)
     print "imdb to update",len(insertimdblist)
-    update_link(insertlinklist)
-    update_douban(insertdoubanlist)
-    update_imdb(insertimdblist)
+    try:
+        update_link(insertlinklist)
+        update_douban(insertdoubanlist)
+        update_imdb(insertimdblist)
+    except:
+        sys.exit(-1)
+    sys.exit(0)
 

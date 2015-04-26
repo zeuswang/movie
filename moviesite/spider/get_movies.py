@@ -197,3 +197,4 @@ if __name__ == "__main__":
     except Exception,e:
         traceback.print_exc(sys.stdout)
         print e
+        sys.exit(-1)
