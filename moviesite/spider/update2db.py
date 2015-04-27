@@ -36,6 +36,8 @@ def update_link(linklist):
             it.date = utils.get_date_from_string(info.date)
             it.title = info.raw
             it.content = info.content
+            if len(it.content)> 950:
+                it.content = it.content[0:950]
             it.found_date = utils.get_date_now()
         except Exception,e:
             traceback.print_exc(sys.stdout)  
