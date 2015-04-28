@@ -52,6 +52,8 @@ def is_num(year):
         if not is_number(c):
             return False
     return True
+
+
 def get_imdb_movies(parser,mlist):
     res = []
     if len(mlist) ==0:
@@ -191,7 +193,7 @@ if __name__ == "__main__":
         mlist.extend(detaillist)
         fp = open(output_url,'w')
         for m in mlist:
-            fp.write(m.url+'\t'+m.raw+'\n')
+            fp.write(m.url+'\t'+m.raw+'\t'+m.cname+'\t'+m.ename+'\t'+m.year+'\n')
         fp.flush()
         fp.close()
     except Exception,e:

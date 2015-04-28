@@ -121,8 +121,38 @@
                 }
 
                 }
-}
+},
+{
+        "url": "http://www.bttiantang.com",
+        "data": {
+                "list": {
+                        "path": "div[class='item cl']",
+                        "link": {
+                                "path": "div[class=title],p[class='tt cl'],a#0,attr@href"
+                        },
+                        "title": {
+                                "path": "div[class=title],b,text"
+                        }
 
+                }
+
+                }
+},
+{
+        "url": "http://www.bttiantang.com/subject",
+        "data": {
+                "list": {
+                        "path": "ul[class=moviedteail_list],li",
+                        "imdb":{
+                        "path":"a[title=imdb],text"
+                        },
+                        "li":{
+                            "path":"text"
+                        }
+                }
+
+                }
+}
 
 ]
 

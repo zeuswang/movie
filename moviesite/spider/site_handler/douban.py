@@ -16,7 +16,6 @@ homedir = os.getcwd()
 sys.path.append(homedir)
 os.environ['DJANGO_SETTINGS_MODULE'] = 'moviesite.settings'
 
-from main.models import Movie,Link,Imdb
 import re
 
 class douban_handler(SiteHandler):
@@ -146,67 +145,4 @@ class douban_handler(SiteHandler):
             res.append(title)
         return res
 
-
-    def update_by_subclass(self,linklist):
-        mlist = []
-        for it in linklist:
-    
-            m = Movie()
-            try:
-                if it.channel ==1:
-                    continue
-                m.mid = int(it.id)
-                m.url = it.url
-                m.cname = it.cname
-                m.ename = it.ename
-                m.actors = it.actors
-                m.director = it.director
-                m.location = it.location
-                m.type = it.type
-                m.date = utils.get_date_from_string(it.date)
-                if m.date ==0:
-                    continue
-                m.rate=0
-                if len(it.rate)>0:
-                    m.rate=int(float(it.rate)*10)
-                if m.rate ==0:
-                    continue
-                m.votes=0
-                if len(it.votes)>0:
-                    m.votes=int(it.votes)
-    
-                if len(it.pic_url)>5:
-                    m.pic_url = it.pic_url
-                else:
-                    m.pic_url ="nopic";
-                m.douban_link ="http://movie.douban.com/subject/"+it.id
-                m.summary = it.summary
-                m.imdb_link = it.imdb_link
-                m.comment_link = it.comment_link
-                m.found_date = utils.get_date_now() 
-                m.runtime = it.runtime
-            except Exception,e:
-                traceback.print_exc(sys.stdout)  
-                print "douban UPDATE ERROR:",e
-                print "douban UPDATE ERROR: url=",it.url,it.raw
-                continue
-    
-            mlist.append(m)
-    
-    
-    
-        try: 
-            havein = Movie.objects.filter(mid__in=[it.mid for it in mlist ])
-            midmap = { it.mid:1 for it in havein }
-    
-            for m in mlist:
-                if m.mid not in midmap:
-                    m.save()
-        except Exception,e:
-            print traceback.print_exc()  
-            print "douban UPDATE ERROR:",e
-            return False
-    
-    
-        return True
 

@@ -15,7 +15,6 @@ homedir = os.getcwd()
 sys.path.append(homedir)
 os.environ['DJANGO_SETTINGS_MODULE'] = 'moviesite.settings'
 import re
-from main.models import Movie,Link,Imdb
 class imdb_handler(SiteHandler):
 
     """Docstring for . """
@@ -93,55 +92,5 @@ class imdb_handler(SiteHandler):
                         res.append(title)
         return res
 
-    def update_by_subclass(self,linklist):
-        mlist = []
-        for it in linklist:
-    
-            m = Imdb()
-            try:
-                m.mid = it.id
-                m.url = it.url
-                m.found_date = utils.get_date_now() 
-         
-                m.cname = it.cname
-                m.ename = it.ename
-                m.actors = it.actors
-                m.director = it.director
-                m.type = it.type
-                m.date = utils.get_date_from_string(it.date)
-                m.box=int(it.box)
-                m.pic_url = it.pic_url
-                if m.pic_url ==None or len(m.pic_url)<4:
-                    m.pic_url = "nopic"
-    
-                m.box = int(it.box)
-                m.rate = int(float(it.rate)*10)
-    
-            except Exception,e:
-                traceback.print_exc(sys.stdout)  
-                print "imdb UPDATE ERROR:",e
-                print "imdb UPDATE ERROR: url=",it.url,it.raw
-                continue
-    
-            mlist.append(m)
-    
-        try:    
-            havein = Imdb.objects.filter(mid__in=[it.mid for it in mlist ])
-            midmap = { it.mid:1 for it in havein }
-        
-            for m in mlist:
-                if m.mid not in midmap:
-                    try:
-                        m.save()
-                    except Exception,e:
-                        traceback.print_exc(sys.stdout)  
-                        print "imdb ERROR:url=",m.url
-                        continue
-        except Exception,e:
-            traceback.print_exc(sys.stdout)  
-            print "imdb ERROR:",e
-            return False
-    
-        return True
 
 

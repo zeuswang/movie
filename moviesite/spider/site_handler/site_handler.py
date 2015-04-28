@@ -2,7 +2,7 @@
 # encoding: utf-8
 import sys
 import traceback
-import banyungong,douban,gaoqing,imdb
+import banyungong,douban,gaoqing,imdb,bttiantang
 
 def get_site_handler(url,parser):
     if "douban" in url:
@@ -13,5 +13,8 @@ def get_site_handler(url,parser):
         return banyungong.banyungong_handler(parser)
     if "gaoqing" in url:
         return gaoqing.gaoqing_handler(parser)
+    if "bttiantang" in url:
+        return bttiantang.bttiantang_handler(parser)
+
     return None
 

@@ -15,7 +15,6 @@ homedir = os.getcwd()
 sys.path.append(homedir)
 os.environ['DJANGO_SETTINGS_MODULE'] = 'moviesite.settings'
 
-from main.models import Movie,Link,Imdb
 
 class gaoqing_handler(SiteHandler):
 
@@ -74,46 +73,6 @@ class gaoqing_handler(SiteHandler):
 
         return mlist
 
-    def update_by_subclass(self,linklist):
-        itlist = []
-        for info in linklist:
-    
-            it = Link()
-            try:
-                it.mid = 0
-                it.url = info.url
-                it.urlmd5 = utils.get_md5_value(info.url) 
-                it.cname = info.cname
-                it.ename = info.ename
-                it.actors = info.actors
-                it.director = info.director
-                it.date = utils.get_date_from_string(info.date)
-                it.title = info.raw
-                it.content = info.content
-                it.found_date = utils.get_date_now()
-            except Exception,e:
-                traceback.print_exc(sys.stdout)  
-                print "gaoqing update LINK ERROR:",e
-                print "gaoqing update LINK ERROR:url=",info.url,info.raw
-                continue
-    
-            itlist.append(it)
-    
-        try:
-            havelist = Link.objects.filter(urlmd5__in=[it.urlmd5 for it in itlist])
-            linkmap = { i.urlmd5:i for i in havelist}
-            for it in itlist:
-                try:
-                    if it.urlmd5 not in linkmap:
-                        it.save()
-                except Exception,e:
-                    traceback.print_exc(sys.stdout)  
-                    print "gaoqing insert db ERROR:",e
-                    print "gaoqing insert db ERROR:url=",it.url
-        except Exception,e:
-            traceback.print_exc(sys.stdout)  
-            print "ERROR:",e
-            return False
 
 
 

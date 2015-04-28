@@ -91,9 +91,9 @@ class Parser:
         data = obj['data']
         res = {}
         for k in data:
-            #print k 
+            print k 
             elements = self._parse_data(doc,k,data[k],debug)
-            #print elements
+            print elements
             #res.append({k:elements})
             res[k]=elements
         return res
