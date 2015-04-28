@@ -12,7 +12,7 @@ banyungong_remove_pattern_list = [r'\[[^\[\]]+\]{1}',
                                 r'.*[\d]{4}年' ]
 banyungong_pattern_list = [r'([\w\d\.]+[0-9]{4}\.)',
                            r'([\w\d\s]+[0-9]{4}\s)',
-                            r'([\w\d\s\']+\([0-9]{4}\))']
+                           r'([\w\d\s\'\:\-]+\([0-9]{4}\))']
 
 common_pattern_list = [r'[二两三四五六七八九十一]+部曲',
                         r'全集',
@@ -120,3 +120,7 @@ if __name__=="__main__":
     print get_title("http://banyungong/","[至暴之年 / 暴力年代(台) / 最暴烈的一年(港)「最坏的时代 最好的人」] A.Most.Violent.Year.2014.1080p.BluRay.x264.DTS-WiKi 11.04 GB")
     print get_title("http://banyungong/","[日本] [喜剧] 2014年 圆桌 [致所有从小学三年级走过的大人们]")
     print get_title("http://banyungong/","飓风营救3 / 即刻救援3(台) Taken.3.2014.EXTENDED.1080p.BluRay.x264.DTS-HD.MA.5.1-RARBG.10.4G")
+    t= get_title("http://banyungong/","豆瓣8.6 科特·柯本：烦恼的蒙太奇 Kurt Cobain: Montage of Heck (2015)")
+    print t.cname
+    print t.ename
+    print t.year
