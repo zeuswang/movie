@@ -127,6 +127,10 @@
         "data": {
                 "list": {
                         "path": "div[class='item cl']",
+                        "title2":{
+                            "path":"div[class=title],p#1,text"
+
+                        },
                         "link": {
                                 "path": "div[class=title],p[class='tt cl'],a#0,attr@href"
                         },
@@ -143,13 +147,14 @@
         "data": {
                 "list": {
                         "path": "ul[class=moviedteail_list],li",
-                        "imdb":{
-                        "path":"a[title=imdb],text"
-                        },
                         "li":{
                             "path":"text"
                         }
-                }
+                },
+                "imdb":{
+                                "path":"a[title=imdb],text"
+                        }
+
 
                 }
 }

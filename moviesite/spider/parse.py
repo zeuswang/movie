@@ -46,7 +46,7 @@ class Parser:
                 return value
             elif '#' in p:
                 pl = p.split('#')    
-                print pl[0],pl[1]
+                #print pl[0],pl[1]
                 node = node(pl[0].encode("utf-8")).eq(int(pl[1]))
                 if node !=None:
                     node = pyq(node)
@@ -91,9 +91,9 @@ class Parser:
         data = obj['data']
         res = {}
         for k in data:
-            print k 
+            #print k 
             elements = self._parse_data(doc,k,data[k],debug)
-            print elements
+            #print elements
             #res.append({k:elements})
             res[k]=elements
         return res
