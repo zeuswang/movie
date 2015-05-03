@@ -28,6 +28,9 @@ class Movie(models.Model):
     summary = models.TextField()
     found_date = models.BigIntegerField()
     links = []
+    def __unicode__(self):
+        return u'%s %s' % (self.mid, self.cname)
+
 class Imdb(models.Model):
     mid = models.BigIntegerField(unique=True,db_index=True)
     douban_id = models.BigIntegerField(default=0) 
@@ -60,4 +63,6 @@ class Link(models.Model):
     date = models.BigIntegerField(default=0) 
     content = models.CharField(max_length=1000)
     found_date = models.BigIntegerField()
+    def __unicode__(self):
+        return u'%s %s' % (self.pk, self.title)
 

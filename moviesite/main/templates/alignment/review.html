@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="zh-CN">
   <head>
@@ -42,7 +41,7 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="#">数据审核</a></li>
+            <li class="active"><a href="#">Link数据审核</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -53,7 +52,13 @@
 
       <!-- Main component for a primary marketing message or call to action -->
       It is now {{ current_date }}.
-      <table class="table table-bordered">
+      <table class="table table-bordered table-striped">
+        {% for review in reviews %}
+        <tr>
+        <td> {{ review.linkid }}</td>
+        <td> {{ review.mid }}</td>
+        </tr>
+        {% endfor %}
       </table>
     </div> <!-- /container -->
 
