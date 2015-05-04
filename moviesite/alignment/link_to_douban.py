@@ -1,9 +1,18 @@
 # -*- coding:utf-8 -*-
-import os, sys
+import os, sys, traceback
 sys.path.append("../")  
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "moviesite.settings")
 from django.conf import settings
 from main.models import Movie,Link
+from alignment.models import LinkReview
+import django.db.utils
+def record_to_db(link, movie):
+    try:
+        l = LinkReview(linkid=link, mid=movie)
+        l.save()
+        pass
+    except django.db.utils.IntegrityError, e:
+        print "linkid %d to mid %d exist %s" % (link.pk, movie.mid, e)
 
 if __name__ == "__main__":
     succ_item = 0
@@ -22,20 +31,22 @@ if __name__ == "__main__":
         for movie in moives:
             if movie.cname.strip() in cname_list:
                 #print movie.cname + "\n" + link.title + "\n\n"
-                succ_item = succ_item + 1
+                record_to_db(link=link, movie=movie)
                 succ_flag = True
                 break
             elif movie.ename.strip() in ename_list:
                 #print movie.cname + "\n" + link.title + "\n\n"
-                succ_item = succ_item + 1
+                record_to_db(link=link, movie=movie)
                 succ_flag = True
                 break
             elif movie.cname.strip() in title_list:
                 #print movie.cname + "\n" + link.title + "\n\n"
-                succ_item = succ_item + 1
+                record_to_db(link=link, movie=movie)
                 succ_flag = True
                 break
         if succ_flag != True:
-            print link.title + "\n"
+            print link.title.encode("utf-8")
             pass
+        else:
+            succ_item = succ_item + 1
     print "[Obsever][success %d][fail %d]\n" % (succ_item,len(links) - succ_item)
