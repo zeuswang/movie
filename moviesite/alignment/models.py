@@ -7,6 +7,6 @@ class LinkReview(models.Model):
     #mid = models.BigIntegerField()
     linkid = models.ForeignKey(Link, db_column="linkid") 
     mid = models.ForeignKey(Movie, to_field="mid", db_column="mid") 
-    create_time = models.DateField(auto_now_add=True) 
+    create_time = models.DateTimeField(auto_now_add=True) 
     def __unicode__(self):
         return u'%s -------> %s' % (self.linkid, self.mid)
