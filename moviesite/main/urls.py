@@ -17,4 +17,5 @@ urlpatterns = patterns('',
 
      url(r'^main/content', 'main.views.content',name='wangwei'),
      url(r'^main/', 'main.views.hello',name='wangwei'),
+     url(r'^$', 'main.views.hello',name='wangwei'),
 )
