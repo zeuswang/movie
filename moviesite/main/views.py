@@ -1,9 +1,10 @@
-# -*- coding:utf-8 -*-
+# -*- coding:utf-8 -*
 import os
 import sys
 import datetime
 from django.shortcuts import render
 from main.models import Movie,Link
+from alignment.models import LinkReview
 from django.conf import settings
 sys.path.append(settings.SEARCH_API_DIR)  
 from sphinxapi import * 
@@ -93,15 +94,31 @@ def hello(request):
     found_date = int(time.strftime('%Y'))*10000 +int(time.strftime('%m'))*100 +int(time.strftime('%d'))
 
     links = Link.objects.filter(found_date__gte=found_date)
-    movies = Movie.objects.filter(mid__in=[it.mid for it in links ])
+    lrs = LinkReview.objects.filter(linkid__in=[it.id for it in links])
+    #for ll in lrs:
+    #    print ll.linkid,ll.mid
+    #movies = Movie.objects.filter(mid__in=[it.mid.mid for it in lrs ])
+    moviesmap = {it.mid.mid:it.mid for it in lrs }
+    movies = [ v for k,v in moviesmap.items() ]
 
-    links = Link.objects.filter(mid__in=[it.mid for it in movies])
+    links = [it.linkid for it in lrs]
+    #lrs_for_movie = LinkReview.objects.filter(mid__in=[it.mid for it in  movies])
+    #print len(lrs_for_movie)
+    #for ll in lrs_for_movie:
+    #    print ll.linkid,ll.mid
+
+    #linkidmidmap = { it.linkid:it.mid for it in lrs_for_movie }
+    linkidmidmap = { it.linkid.id:it.mid.mid for it in lrs }
+    #links = Link.objects.filter(id__in=[it.linkid for it in lrs_for_movie])
+    #for ll in links:
+     #   print "links",ll.id,ll.url
     for m in movies:
 #        m.pic_url = 'photos/pic/'+ str(m.mid) +'.jpg'
         m.links=[]
         m.found_date = 0
         for link in links:
-            if link.mid == m.mid:
+            #if link.mid == m.mid:
+            if linkidmidmap[link.id] == m.mid:
                 #rint link.mid,link.url,link.title
                 if link.found_date > m.found_date:
                     m.found_date = link.found_date
@@ -157,22 +174,42 @@ def content(request):
     search_key = unquote(search_key)
     print search_key
     movies = None
+    links = None
+    linkidmidmap = {}
     if len(search_key) >0:
         movies = get_search(search_key)
+        lrs = LinkReview.objects.filter(mid__in=[it.mid for it in  movies])
+
+        links = [it.linkid for it in lrs] 
+
+
+        linkidmidmap = { it.linkid.id:it.mid.mid for it in lrs }
     else:
         time = datetime.datetime.now() - datetime.timedelta(days=7)
         found_date = int(time.strftime('%Y'))*10000 +int(time.strftime('%m'))*100 +int(time.strftime('%d'))
 
         links = Link.objects.filter(found_date__gte=found_date)
-        movies = Movie.objects.filter(mid__in=[it.mid for it in links ])
+        lrs = LinkReview.objects.filter(linkid__in=[it.id for it in links])
+        #for ll in lrs:
+        #    print ll.linkid,ll.mid
+        #movies = Movie.objects.filter(mid__in=[it.mid.mid for it in lrs ])
+        moviesmap = {it.mid.mid:it.mid for it in lrs }
+        movies = [ v for k,v in moviesmap.items() ]
 
-    links = Link.objects.filter(mid__in=[it.mid for it in movies])
+        links = [it.linkid for it in lrs]
+
+        linkidmidmap = { it.linkid.id:it.mid.mid for it in lrs }
+ 
+
+
+
     for m in movies:
         #m.pic_url = 'photos/pic/'+ str(m.mid) +'.jpg'
         m.links=[]
         m.found_date = 0
         for link in links:
-            if link.mid == m.mid:
+            #if link.mid == m.mid:
+            if linkidmidmap[link.id] == m.mid:
                 #rint link.mid,link.url,link.title
                 if link.found_date > m.found_date:
                     m.found_date = link.found_date

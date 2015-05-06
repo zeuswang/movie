@@ -2,11 +2,11 @@
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
-ROOTDIR = "/home/work/movie/moviesite/"
-UPDATE_DIR = "/home/work/movie/data/"
-SPIDER_DIR = "/home/work/movie/moviesite/spider/"
-SPIDER_TEMPLATE = "/home/work/movie/moviesite/spider/conf/template"
-SEARCH_API_DIR = "/home/work/movie/moviesite/search/"
+ROOTDIR = "/home/wangwei/moviesite/moviesite/"
+UPDATE_DIR = "/home/wangwei/online/mspider/data/"
+SPIDER_DIR = "/home/wangwei/online/mspider/script/"
+SPIDER_TEMPLATE = "/home/wangwei/online/mspider/conf/template"
+SEARCH_API_DIR = "/home/wangwei/moviesite/moviesite/search/"
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
@@ -38,7 +38,8 @@ TIME_ZONE = 'Asia/Shanghai'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
-LANGUAGE_CODE = 'en-us'
+#LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'zh-hans'
 
 SITE_ID = 1
 
@@ -75,7 +76,7 @@ STATIC_URL = '/static/'
 # Additional locations of static files
 STATICFILES_DIRS = (
 
-    "/home/work/movie/moviesite/static/",
+    "/home/wangwei/moviesite/moviesite/static/",
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -118,6 +119,8 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+
+    "/home/work/movie/moviesite/templates/",
 )
 
 INSTALLED_APPS = (
@@ -128,8 +131,9 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'main',
+    'alignment',
     # Uncomment the next line to enable the admin:
-    # 'django.contrib.admin',
+     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )
