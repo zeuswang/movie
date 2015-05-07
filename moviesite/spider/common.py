@@ -9,6 +9,7 @@ class Item:
         self.pic_url=""
         self.cname=""
         self.ename=""
+        self.search_key=""
         self.aname=""
         self.actors=""
         self.channel=0

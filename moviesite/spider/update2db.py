@@ -190,7 +190,10 @@ if __name__ == "__main__":
     doubanurlmap = {}
     imdburlmap ={}
     for line in open(file,'r'):
-        urllist = line.strip().split('\t')
+        urllist = line.split('\t')
+        if len(urllist)< 6:
+            continue
+        search_key = urllist[5]
         url = urllist[0]
         url = url.strip('/')
         if len(url)<3:
@@ -222,6 +225,7 @@ if __name__ == "__main__":
                             it.cname = urllist[2]
                             it.ename = urllist[3]
                             it.date = urllist[4]
+                            it.search_key = search_key
                         it.raw = urllist[1]
                         detaillist.append(it)
                         for ur in urls:

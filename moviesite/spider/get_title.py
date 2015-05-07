@@ -9,7 +9,9 @@ gaoqing_remove_pattern_list = [r'\[.*\]+.*',
                                 r'.*[\d]{4}年' ]
 
 banyungong_remove_pattern_list = [r'\[[^\[\]]+\]{1}',
-                                r'.*[\d]{4}年' ]
+                                r'.*[\d]{4}年',
+                                r'[\:\-&\']',
+                                '’']
 banyungong_pattern_list = [r'([\w\d\.]+[0-9]{4}\.)',
                            r'([\w\d\s]+[0-9]{4}\s)',
                            r'([\w\d\s\'\:\-]+\([0-9]{4}\))']
@@ -34,6 +36,7 @@ class Title:
         self.ename = ""    
         self.year = ""
         self.rate = ""
+        self.search_key = ""
         self.detail_info = DetailInfo()
 
 def gaoqing_title(url,name):
@@ -41,7 +44,7 @@ def gaoqing_title(url,name):
     #    http://gaoqing.la/the-admiral-roaring-currents.html
     url = url.replace("http://gaoqing.la/",'')
     url = url.replace(".html",'')
-    url = url.replace("-",' ')
+    url = url.replace("-",'.')
     s = name[:]
     for pattern in gaoqing_remove_pattern_list:
         p = re.compile(pattern) 
@@ -55,23 +58,28 @@ def gaoqing_title(url,name):
     if m !=None:
         year = m.group()[0:4]
     t = Title()
-    t.cname = s
-    t.ename = url
+    t.cname = s.strip(' ')
+    t.ename = url.strip(' ')
     t.year = year
     return t
 def banyungong_title(name):
     s = name[:]
+
+    print "s:",s
     for pattern in banyungong_remove_pattern_list:
 
         p = re.compile(pattern) 
         match = p.findall(s)
         for t in match:
-    #        print t
+            print "xxxxx",t
+            print "xxxxx",s
+            print "xxx",pattern
             s = s.replace(t,'')
     #        print s
     ename = ""
     year = ""
     cname  = ""
+    print "s:",s
     for r in banyungong_pattern_list:
         p = re.compile(r)
         m = p.findall(s)
@@ -86,8 +94,14 @@ def banyungong_title(name):
         
 
     t = Title()
-    t.cname = cname
-    t.ename = ename
+    print cname
+    print ename
+    t.cname = cname.strip(' ')
+    t.ename = ename.strip(' .')
+    if '.' not in t.ename and ' ' in t.ename:
+        t.ename = ".".join(filter(lambda x:x!="",t.ename.split(' ')))
+        #t.ename = ename.replace(' ','.')
+        #t.ename = t.ename.strip('.')
     t.year = year
 
     if ename ==  "" and cname  == "":
@@ -104,6 +118,7 @@ def get_title(urlname,str_all):
         if match != None:
             return None
     t = None
+
     if "banyungong" in urlname:
         t =  banyungong_title(str_all)
     elif  "gaoqing" in urlname:
@@ -121,6 +136,7 @@ if __name__=="__main__":
     print get_title("http://banyungong/","[日本] [喜剧] 2014年 圆桌 [致所有从小学三年级走过的大人们]")
     print get_title("http://banyungong/","飓风营救3 / 即刻救援3(台) Taken.3.2014.EXTENDED.1080p.BluRay.x264.DTS-HD.MA.5.1-RARBG.10.4G")
     t= get_title("http://banyungong/","豆瓣8.6 科特·柯本：烦恼的蒙太奇 Kurt Cobain: Montage of Heck (2015)")
+    t= get_title("http://banyungong/","破茧威龙 Lock Up (1989)")
     print t.cname
     print t.ename
     print t.year

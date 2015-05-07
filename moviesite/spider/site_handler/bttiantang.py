@@ -23,6 +23,8 @@ def get_title(url,title,title2):
     ti.cname = title.split("/")[0]
     ti.ename = title.split("/")[1].split(".")[0]
     ti.year = title.split(".")[1]
+    ti.ename = ti.ename.replace('.','')
+    ti.ename = ".".join(filter(lambda x:x!="",ti.ename.split(' ')))
     return ti
 class bttiantang_handler(SiteHandler):
 
