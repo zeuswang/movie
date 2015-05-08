@@ -48,24 +48,27 @@
         "url": "http://movie.douban.com/subject_search",
         "data": {
                 "list": {
-                        "path": "div[class=article],div[class=pl2]",
+                        "path": "div[class=article],tr[class=item]",
+                        "pic_url":{
+                            "path":"img,attr@src"
+                        },
                         "link":{
-                            "path":"a,attr@href"
+                            "path":"div[class=pl2],a,attr@href"
                         },
                         "info":{
-                            "path":"p[class=pl],text"
+                            "path":"div[class=pl2],p[class=pl],text"
                         },
                         "title":{
-                            "path":"a,text"
+                            "path":"div[class=pl2],a,text"
                         },
                         "span":{
-                            "path":"a,span,text"
+                            "path":"div[class=pl2],a,span,text"
                         },
                         "rate":{
-                            "path":"span[class=rating_nums],text"
+                            "path":"div[class=pl2],span[class=rating_nums],text"
                         },
                         "votes":{
-                            "path":"span[class=pl],text"
+                            "path":"div[class=pl2],span[class=pl],text"
                         }
 
 

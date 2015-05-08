@@ -73,7 +73,7 @@ class banyungong_handler(SiteHandler):
                 t  = get_title(link,title)
                 if t !=None:
                     mlist.append(t)
-                    if len(mlist)>30:
+                    if len(mlist)>15:
                         break
             
         return mlist 

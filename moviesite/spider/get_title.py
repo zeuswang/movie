@@ -37,6 +37,9 @@ class Title:
         self.year = ""
         self.rate = ""
         self.search_key = ""
+        self.pic_url = ""
+        self.mid = ""
+        self.imdbid = ""
         self.detail_info = DetailInfo()
 
 def gaoqing_title(url,name):

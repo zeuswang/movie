@@ -140,6 +140,7 @@ class douban_handler(SiteHandler):
             else:
                 title.year = ""
             title.url = d['link']
+            title.pic_url = d['pic_url']
             title.raw = d['title'].split('\n')[0]
             title.rate = d['rate']
             res.append(title)

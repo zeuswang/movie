@@ -3,6 +3,8 @@ import time
 class Item:
     def __init__(self):
         self.id = ""
+        self.mid = ""
+        self.imdbid=""
         self.url =""
         self.raw = ""
         self.content =""
