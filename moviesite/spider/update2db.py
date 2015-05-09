@@ -230,8 +230,8 @@ if __name__ == "__main__":
                             it.cname = urllist[2]
                             it.ename = urllist[3]
                             it.date = urllist[4]
-                            it.mid = urllist[5]
-                            it.imdbid = urllist[6]
+                        it.mid = urllist[5]
+                        it.imdbid = urllist[6]
                         it.raw = urllist[1]
                         detaillist.append(it)
                         for ur in urls:
