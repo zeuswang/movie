@@ -26,6 +26,19 @@ class gaoqing_handler(SiteHandler):
         con = res['content']
         strlist = con.split("◎")
         newurl = []
+        qlist = res['quality']
+        qalist = []
+        for qa in qlist:
+            q= qa['item']
+            if '1080' in q:
+                qalist.append('1080p')
+            if '720' in q:
+                qalist.append('720p')
+            if 'WEB' in q:
+                qalist.append('webdl')
+            if 'bluray' in q:
+                qalist.append('bluray')
+        
         it = None
         if len(strlist)>2:
             it = Item()
@@ -58,7 +71,8 @@ class gaoqing_handler(SiteHandler):
             it = Item()
             it.url = url
             it.content = con
-    
+        if it!= None:
+            it.quality = "/".join(qalist)
         return it ,newurl  
     def dir_parse_by_subclass(self,url,page): 
         mlist = []

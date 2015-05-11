@@ -25,7 +25,10 @@
         "url": "http://gaoqing.la/.*html",
                 "data": {
                         "quality": {
-                            "path": "div[class=article_info],a,text"
+                            "path": "div[class=article_info],a",
+                            "item": {
+                                "path":"text"
+                            }
                         },
                         "content": {
                                 "path": "div[id=post_content],text"

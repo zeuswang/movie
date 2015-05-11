@@ -35,6 +35,7 @@ def update_link(linklist):
             else:
                 it.imdbid = 0
             it.url = info.url
+            print "quality",info.quality
             it.quality = info.quality
             it.urlmd5 = utils.get_md5_value(info.url) 
             it.cname = info.cname
@@ -198,6 +199,7 @@ if __name__ == "__main__":
     for line in open(file,'r'):
         urllist = line.split('\t')
         if len(urllist)< 8:
+            print '缺少字段'
             continue
         search_key = urllist[5]
         url = urllist[0]
