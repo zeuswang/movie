@@ -70,7 +70,7 @@ class imdb_handler(SiteHandler):
     def dir_parse_by_subclass(self,url,page): 
         res = []
         dlist = self.parser.get_parse_data(url,page) 
-        for d in dlist['list'][0:2]:
+        for d in dlist['list']:
             title = Title()
             if 'title' in d['link']:
                 ti = d['title']

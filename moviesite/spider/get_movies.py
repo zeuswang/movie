@@ -312,12 +312,17 @@ if __name__ == "__main__":
         parser.init(sys.argv[1])
         mlist = [] 
         for line in open(urlfile,'r'):
-            url = line.strip()
+            flist = line.strip().split('\t')
+            url = flist[0]
+            quality = flist[1]
             print url
             handler = site_handler.get_site_handler(url,parser) 
             page = utils.crawl_timeout(url,15,3)
             if  page !=None:
-                mlist.extend(handler.dir_parse(url,page))
+                cclist = handler.dir_parse(url,page)
+                for m in cclist:
+                    m.quality = quality
+                mlist.extend(cclist)
     
         for m in mlist:
             print m.url
@@ -368,7 +373,7 @@ if __name__ == "__main__":
         linklist.extend(detaillist)
         fp = open(output_url,'w')
         for m in linklist:
-            fp.write(m.url+'\t'+m.raw+'\t'+m.cname+'\t'+m.ename+'\t'+m.year+'\t'+m.mid+'\t'+ m.imdbid+'\n')
+            fp.write(m.url+'\t'+m.raw+'\t'+m.cname+'\t'+m.ename+'\t'+m.year+'\t'+m.mid+'\t'+ m.imdbid+'\t'+m.quality+'\n')
 
         fp.flush()
         fp.close()

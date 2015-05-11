@@ -40,6 +40,7 @@ class Title:
         self.pic_url = ""
         self.mid = ""
         self.imdbid = ""
+        self.quality = ""
         self.detail_info = DetailInfo()
 
 def gaoqing_title(url,name):

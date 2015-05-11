@@ -67,6 +67,7 @@ class Link(models.Model):
     date = models.BigIntegerField(default=0) 
     content = models.CharField(max_length=1000)
     found_date = models.BigIntegerField()
+    quality = models.CharField(max_length=50)
     def __unicode__(self):
         return u'%s %s' % (self.pk, self.title)
 

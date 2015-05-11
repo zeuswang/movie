@@ -25,6 +25,7 @@ class Item:
         self.votes=0
         self.box=0
         self.error=0
+        self.quality = ""
         self.imdb_link=""
         self.comment_link=""
         self.summary=""

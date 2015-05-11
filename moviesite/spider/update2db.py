@@ -35,6 +35,7 @@ def update_link(linklist):
             else:
                 it.imdbid = 0
             it.url = info.url
+            it.quality = info.quality
             it.urlmd5 = utils.get_md5_value(info.url) 
             it.cname = info.cname
             it.ename = info.ename
@@ -94,8 +95,6 @@ def update_douban(doubanlist):
             m.rate=0
             if len(it.rate)>0:
                 m.rate=int(float(it.rate)*10)
-            if m.rate ==0:
-                continue
             m.votes=0
             if len(it.votes)>0:
                 m.votes=int(it.votes)
@@ -198,7 +197,7 @@ if __name__ == "__main__":
     imdburlmap ={}
     for line in open(file,'r'):
         urllist = line.split('\t')
-        if len(urllist)< 7:
+        if len(urllist)< 8:
             continue
         search_key = urllist[5]
         url = urllist[0]
@@ -232,6 +231,8 @@ if __name__ == "__main__":
                             it.date = urllist[4]
                         it.mid = urllist[5]
                         it.imdbid = urllist[6]
+                        if it.quality =="":
+                            it.quality = urllist[7]
                         it.raw = urllist[1]
                         detaillist.append(it)
                         for ur in urls:

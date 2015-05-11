@@ -4,7 +4,7 @@
         <script src="{{STATIC_URL}}js/bootstrap.min.js"></script>
         <script type="text/javascript">
 
-        var domain = 'main/content'
+                var domain = 'main/content'
                 var type_map = new Map();
                 var type = ""
                 var rate = false
@@ -49,17 +49,17 @@ function  params_str()
 $(document).ready(function(){
                 $("#but-rate").click(function(){
                         rate =true
-                        $("#tbody").load(domain,params_str());
+                        $("#content").load(domain,params_str());
                         rate =false
                         });
                 $("#but-date").click(function(){
                         date =true
-                        $("#tbody").load(domain,params_str());
+                        $("#content").load(domain,params_str());
                         date = false
                         });
                 $("#but-found-date").click(function(){
                         found_date =true
-                        $("#tbody").load(domain,params_str());
+                        $("#content").load(domain,params_str());
                         found_date = false
                         });
 
@@ -74,20 +74,20 @@ $(document).ready(function(){
                         type = $(e.target).attr("id").split("-")[1];
                         $( e.target).attr("class","btn btn-lg btn-info");
                         }
-                        $("#tbody").load(domain ,params_str());
+                        $("#content").load(domain ,params_str());
 
                         });
                 $("button[id='search']").click(function(){
                                 search_key =       $('input[id=\'input_search\']').val(); 
-                                $("#tbody").load(domain,params_str());
+                                $("#content").load(domain,params_str());
                                 });
 
 
 });
 </script>
 </head>
-<p>                            </p>
-<div class="row">
+<body>
+        <div class='row'  style="width:1500px;margin:0 auto">
         <div class="col-lg-6">
                 <div class="input-group">
                         <input type="text" class="form-control" id="input_search" placeholder="Search for...">
@@ -96,97 +96,92 @@ $(document).ready(function(){
                         </span>
                 </div><!-- /input-group -->
         </div><!-- /.col-lg-6 -->
-</div><!-- /.row -->
-<p> 本站点使用jquery2，因此不支持ie 6,7,8 !!!</p>
-<p>
-<td> 按类型 </td>
-<td> 
-        <button type="button" id="type-xiju" class="btn btn-default">喜剧</button>
-</td>
+        </div>
 
-<td> 
+        <div class='row'  style="width:1500px;margin:0 auto">
+        <p> 本站点使用jquery2，因此不支持ie 6,7,8 !!!</p>
+        </div>
 
-        <button type="button" id="type-dongzuo" class="btn btn-default">动作</button>
-</td>
-<td> 
-        <button type="button" id="type-donghua" class="btn btn-default">动画</button>
-</td>
-<td> 
-        <button type="button" id="type-juqing" class="btn btn-default">剧情</button>
-</td>
-<td> 
+<div class='row'  style="width:1500px;margin:0 auto">
+        <td> 按类型 </td>
+        <td> 
+                <button type="button" id="type-xiju" class="btn btn-default">喜剧</button>
+        </td>
 
-        <button type="button" id="type-jiating" class="btn btn-default">家庭</button>
-</td>
-<td> 
-        <button type="button" id="type-kehuan" class="btn btn-default">科幻</button>
-</td>
-<td> 
-        <button type="button" id="type-maoxian" class="btn btn-default">冒险</button>
-</td>
-<td> 
-        <button type="button" id="type-xuanyi" class="btn btn-default">悬疑</button>
-</td>
-<td> 
+        <td> 
 
-        <button type="button" id="type-kongbu" class="btn btn-default">恐怖</button>
-</td>
-<td> 
-        <button type="button" id="type-qihuan" class="btn btn-default">奇幻</button>
-</td>
-<td> 
-        <button type="button" id="type-jingsong" class="btn btn-default">惊悚</button>
-</td>
-<td> 
-        <button type="button" id="type-zhanzheng" class="btn btn-default">战争</button>
-</td>
+                <button type="button" id="type-dongzuo" class="btn btn-default">动作</button>
+        </td>
+        <td> 
+                <button type="button" id="type-donghua" class="btn btn-default">动画</button>
+        </td>
+        <td> 
+                <button type="button" id="type-juqing" class="btn btn-default">剧情</button>
+        </td>
+        <td> 
+
+                <button type="button" id="type-jiating" class="btn btn-default">家庭</button>
+        </td>
+        <td> 
+                <button type="button" id="type-kehuan" class="btn btn-default">科幻</button>
+        </td>
+        <td> 
+                <button type="button" id="type-maoxian" class="btn btn-default">冒险</button>
+        </td>
+        <td> 
+                <button type="button" id="type-xuanyi" class="btn btn-default">悬疑</button>
+        </td>
+        <td> 
+
+                <button type="button" id="type-kongbu" class="btn btn-default">恐怖</button>
+        </td>
+        <td> 
+                <button type="button" id="type-qihuan" class="btn btn-default">奇幻</button>
+        </td>
+        <td> 
+                <button type="button" id="type-jingsong" class="btn btn-default">惊悚</button>
+        </td>
+        <td> 
+                <button type="button" id="type-zhanzheng" class="btn btn-default">战争</button>
+        </td>
 
 
-</p>
 
-<div id="main">
-        <table class="table table-bordered">
-                <thead>
-                        <tr>
-                                <th>海报</th>
-                                <th>信息</th>
-                                <th><button type="button" id="but-rate" class="btn btn-primary"> 豆瓣评分</button> </th>
-                                <th><button type="button" id="but-date" class="btn btn-primary"> 上映时间</button> </th>
-                                <th><button type="button" id="but-found-date" class="btn btn-primary"> 资源更新时间</button> </th>
-                                <th>种子资源</th>
-                        </tr>
-                </thead>
-                <tbody id="tbody">
-                        {% if mlist %}
-                        {% for m in mlist %}
-                        <tr>
-                                <!--   <td>        <img src="{{STATIC_URL}}{{m.pic_url }}" > </td>  -->
-                                <td>        <img rel="noreferrer" src="{{m.pic_url }}" > </td> 
-                                <td>
-                                        <li>中文名：{{ m.cname }}</li>
-                                        <li>英文名：{{ m.ename }}</li>
-                                        <li>主演：{{ m.actors }}</li>
-                                        <li>导演：{{ m.director }}</li>
-                                        <li>地区：{{ m.location }}</li>
-                                        <li>类型：{{ m.type }}</li>
-
-                                        <li>豆瓣链接：<a href="{{ m.douban_link }}"> {{m.douban_link}}</a></li>
-                                </td>
-                                <td>{{m.rate}}</td>
-                                <td>{{m.date}}</td>
-                                <td>{{m.found_date}}</td>
-                                <td>
-                                        {% for d in m.links %}
-                                        <li><a href=" {{ d.url}} " > {{ d.title}}</a> </li>
-                                        {% endfor %}
-                                </td>
-                        </tr>
-                        {% endfor %}
-                </ul>
-                {% else %}
-                <p>No movie are available.</p>
-                <p>oh shit，i wanna fuck myself.</p>
-                {% endif %}
-        </tbody>
-</table>
 </div>
+<div>
+        <div id="content" class='row'  style="width:1500px;margin:0 auto">
+
+                {% if mlist %}
+                {% for m in mlist %}
+                <div class="col-md-1" style="width:250px;height:350px;">
+                        <table class="table table-bordered">
+                                <tr>
+                                        <th style="width:250px;height:350px;">
+
+                                                <div>
+                                                        <img src="http://img5.douban.com/mpic/s24232439.jpg">
+                                                </div>
+                                            <div>{{m.cname}}</div>
+                                               <div>
+                                                      主演:
+                                                     <font size="2">
+                                                    {{m.actors}}
+                                            </font>
+                                               </div>
+                                                <div>豆瓣：{{m.rate}}</div>
+                                                    
+                                                <div>imdb:{{m.imdb_rate}}</div>
+
+                                </th> 
+                                </tr>
+                        </table>
+
+
+
+                </div>
+                {% endfor %}
+                {% endif %}
+        </div>
+</div>
+
+</body>

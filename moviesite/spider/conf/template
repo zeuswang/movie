@@ -1,6 +1,6 @@
 [
 {
-        "url": "http://banyungong.net/category/101.html",
+        "url": "http://banyungong.net/category",
                 "data": {
                         "list": {
                                 "path": "table[class=tableList]#1,a",
@@ -24,6 +24,9 @@
 {
         "url": "http://gaoqing.la/.*html",
                 "data": {
+                        "quality": {
+                            "path": "div[class=article_info],a,text"
+                        },
                         "content": {
                                 "path": "div[id=post_content],text"
                                 }
@@ -153,6 +156,14 @@
                         "li":{
                             "path":"text"
                         }
+                },
+                "tinfo": {
+                        "path":"div[class=tinfo]",
+                        "quality":{
+                            "path":"p[class=torrent],text"
+
+                        }
+
                 },
                 "imdb":{
                                 "path":"a[title=imdb],text"

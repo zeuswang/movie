@@ -47,6 +47,18 @@ class bttiantang_handler(SiteHandler):
             if "主演:" in li:
                 it.actors = li.replace("主演:",'')
             it.url = url
+        quality = {}
+        for tinfo in res['tinfo']:
+            qs = tinfo['quality']
+            if '720p' in qs:
+                quality['720p'] = 1
+
+            if '1080p' in qs:
+                quality['1080p'] = 1
+
+            if 'CAM' in qs or 'TS' in qs:
+                quality['TS'] = 1
+        it.quality = '/'.join([ k for k,v in quality.items()])
 
         imdb_url = res['imdb']
         if imdb_url != None and len(imdb_url) > 0:

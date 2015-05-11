@@ -3,7 +3,7 @@ import os
 import sys
 import datetime
 from django.shortcuts import render
-from main.models import Movie,Link
+from main.models import Movie,Link,Imdb
 from alignment.models import LinkReview
 from django.conf import settings
 sys.path.append(settings.SEARCH_API_DIR)  
@@ -94,35 +94,41 @@ def hello(request):
     found_date = int(time.strftime('%Y'))*10000 +int(time.strftime('%m'))*100 +int(time.strftime('%d'))
 
     links = Link.objects.filter(found_date__gte=found_date)
-    lrs = LinkReview.objects.filter(linkid__in=[it.id for it in links])
-    #for ll in lrs:
-    #    print ll.linkid,ll.mid
-    #movies = Movie.objects.filter(mid__in=[it.mid.mid for it in lrs ])
-    moviesmap = {it.mid.mid:it.mid for it in lrs }
-    movies = [ v for k,v in moviesmap.items() ]
+    movies = Movie.objects.filter(mid__in=[it.mid for it in links ])
+    links = Link.objects.filter(mid__in=[it.mid for it in movies])
+    imdbs = Imdb.objects.filter(mid__in=[it.imdbid for it in links])
+    imdbmap = { it.mid:it for it in imdbs }
+    print imdbmap
+    linkidmidmap = { it.id:it.mid for it in links }
 
-    links = [it.linkid for it in lrs]
-    #lrs_for_movie = LinkReview.objects.filter(mid__in=[it.mid for it in  movies])
-    #print len(lrs_for_movie)
-    #for ll in lrs_for_movie:
-    #    print ll.linkid,ll.mid
-
-    #linkidmidmap = { it.linkid:it.mid for it in lrs_for_movie }
-    linkidmidmap = { it.linkid.id:it.mid.mid for it in lrs }
-    #links = Link.objects.filter(id__in=[it.linkid for it in lrs_for_movie])
-    #for ll in links:
-     #   print "links",ll.id,ll.url
     for m in movies:
 #        m.pic_url = 'photos/pic/'+ str(m.mid) +'.jpg'
         m.links=[]
         m.found_date = 0
+        m.imdb_rate =0
+        imdbid =0
+        actors = []
+        alist  = m.actors.split('/')
+        for a in alist:
+            if len(a)>1:
+                actors.append(a)
+                if len(actors) ==3:
+                    break
+        m.actors = '/'.join(actors)
         for link in links:
             #if link.mid == m.mid:
+               
             if linkidmidmap[link.id] == m.mid:
+                if link.imdbid !=0:
+                    imdbid = link.imdbid
+       
                 #rint link.mid,link.url,link.title
                 if link.found_date > m.found_date:
                     m.found_date = link.found_date
                 m.links.append(link)
+        if imdbid !=0 and imdbid in imdbmap:
+            print "imdbid",imdbid
+            m.imdb_rate = imdbmap[imdbid].rate
         #print m.mid,m.cname,len(links)
     mlist = [m for m in movies ]
     if rate :
@@ -133,6 +139,7 @@ def hello(request):
         mlist.sort(key=lambda x:date_weight(x)*x.rate,reverse=True)
 #    for m in mlist:
 #        print m.cname,m.rate,m.date,date_weight(m),date_weight(m)*m.rate
+   
     context = {'mlist':mlist}
     return render(request, 'main/index.html', context)
 def type_filter(cc,type):
@@ -178,44 +185,48 @@ def content(request):
     linkidmidmap = {}
     if len(search_key) >0:
         movies = get_search(search_key)
-        lrs = LinkReview.objects.filter(mid__in=[it.mid for it in  movies])
-
-        links = [it.linkid for it in lrs] 
-
-
-        linkidmidmap = { it.linkid.id:it.mid.mid for it in lrs }
     else:
         time = datetime.datetime.now() - datetime.timedelta(days=7)
         found_date = int(time.strftime('%Y'))*10000 +int(time.strftime('%m'))*100 +int(time.strftime('%d'))
 
         links = Link.objects.filter(found_date__gte=found_date)
-        lrs = LinkReview.objects.filter(linkid__in=[it.id for it in links])
-        #for ll in lrs:
-        #    print ll.linkid,ll.mid
-        #movies = Movie.objects.filter(mid__in=[it.mid.mid for it in lrs ])
-        moviesmap = {it.mid.mid:it.mid for it in lrs }
-        movies = [ v for k,v in moviesmap.items() ]
+        movies = Movie.objects.filter(mid__in=[it.mid for it in links ])
 
-        links = [it.linkid for it in lrs]
-
-        linkidmidmap = { it.linkid.id:it.mid.mid for it in lrs }
- 
-
-
+    links = Link.objects.filter(mid__in=[it.mid for it in movies])
+    linkidmidmap = { it.id:it.mid for it in links }
+    imdbs = Imdb.objects.filter(mid__in=[it.imdbid for it in links])
+    imdbmap = { it.mid:it for it in imdbs }
 
     for m in movies:
-        #m.pic_url = 'photos/pic/'+ str(m.mid) +'.jpg'
+#        m.pic_url = 'photos/pic/'+ str(m.mid) +'.jpg'
         m.links=[]
         m.found_date = 0
+        m.imdb_rate =0
+        imdbid =0
+        actors = []
+        alist  = m.actors.split('/')
+        for a in alist:
+            if len(a)>1:
+                actors.append(a)
+                if len(actors) ==3:
+                    break
+        m.actors = '/'.join(actors)
         for link in links:
             #if link.mid == m.mid:
+               
             if linkidmidmap[link.id] == m.mid:
+                if link.imdbid !=0:
+                    imdbid = link.imdbid
+       
                 #rint link.mid,link.url,link.title
                 if link.found_date > m.found_date:
                     m.found_date = link.found_date
-
                 m.links.append(link)
+        if imdbid !=0 and imdbid in imdbmap:
+            print "imdbid",imdbid
+            m.imdb_rate = imdbmap[imdbid].rate
         #print m.mid,m.cname,len(links)
+
     mlist = []
     if type!=None:
         for m in movies:
