@@ -246,3 +246,38 @@ def content(request):
     context = {'mlist':mlist}
     print "xxxxxxxxxxx"
     return render(request, 'main/content.html', context)
+
+def detail(request):
+    url = request.path
+    print url
+    mmid = url.strip('/').split('/')[-1]
+    movid = int(mmid)
+    print "mmid",mmid
+    m = Movie.objects.get(mid=movid)
+    links = Link.objects.filter(mid__in=[m.mid])
+    linkidmidmap = { it.id:it.mid for it in links }
+    imdbs = Imdb.objects.filter(mid__in=[it.imdbid for it in links])
+    imdbmap = { it.mid:it for it in imdbs }
+    imdbid = 0
+    m.links = []
+    for link in links:
+            #if link.mid == m.mid:
+               
+        if linkidmidmap[link.id] == m.mid:
+            if link.imdbid !=0:
+                imdbid = link.imdbid
+   
+            #rint link.mid,link.url,link.title
+            if link.found_date > m.found_date:
+                m.found_date = link.found_date
+            m.links.append(link)
+
+        if imdbid !=0 and imdbid in imdbmap:
+            print "imdbid",imdbid
+            m.imdb_rate = imdbmap[imdbid].rate
+ 
+
+    context = {'movie':m}
+
+    return render(request, 'main/detail.html', context)
+

@@ -16,5 +16,6 @@ urlpatterns = patterns('',
     # url(r'^admin/', include(admin.site.urls)),
 
      url(r'^content', 'main.views.content',name='wangwei'),
+     url(r'^detail', 'main.views.detail',name='wangwei'),
      url(r'', 'main.views.hello',name='wangwei'),
 )
