@@ -153,10 +153,10 @@ $(document).ready(function(){
 
                 {% if mlist %}
                 {% for m in mlist %}
-                <div class="col-md-1" style="width:250px;height:380px;">
+                <div class="col-md-1" style="width:250px;height:400px;">
                         <table class="table table-bordered">
                                 <tr>
-                                        <th style="width:250px;height:380px;">
+                                        <th style="width:250px;height:400px;">
 
                                                 <div>
                                                         <img src="{{STATIC_URL}}{{m.pic_url}}">
@@ -164,7 +164,7 @@ $(document).ready(function(){
                                             <div>
                                                         <a href="main/detail/{{m.mid}}" >
                                                                 {{m.cname}} </a>
-                                                </div>
+                                               </div>
  
                                                <div>
                                                       主演:
@@ -175,6 +175,9 @@ $(document).ready(function(){
                                                 <div>豆瓣：{{m.rate}}</div>
                                                     
                                                 <div>imdb:{{m.imdb_rate}}</div>
+                                                <div>
+                                                        资源:{{m.quality}} 
+                                                </div>
 
                                 </th> 
                                 </tr>

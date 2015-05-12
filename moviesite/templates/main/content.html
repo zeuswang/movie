@@ -1,38 +1,42 @@
 
-               {% if mlist %}
-                {% for m in mlist %}
-                <div class="col-md-1" style="width:250px;height:380px;">
-                        <table class="table table-bordered">
-                                <tr>
-                                        <th style="width:250px;height:380px;">
+{% if mlist %}
+{% for m in mlist %}
+<div class="col-md-1" style="width:250px;height:380px;">
+        <table class="table table-bordered">
+                <tr>
+                        <th style="width:250px;height:380px;">
 
-                                                <div>
-                                                        <img src="{{STATIC_URL}}{{m.pic_url}}">
-                                                </div>
-                                                <div>
-                                                        <a href="main/detail/{{m.mid}}" >
-                                                                {{m.cname}} </a>
-                                                
-                                                
-                                                </div>
-                                               <div>
-                                                      主演:
-                                                     <font size="2">
-                                                    {{m.actors}}
-                                            </font>
-                                               </div>
-                                                <div>豆瓣：{{m.rate}}</div>
-                                                    
-                                                <div>imdb:{{m.imdb_rate}}</div>
-
-                                </th> 
-                                </tr>
-                        </table>
+                                <div>
+                                        <img src="{{STATIC_URL}}{{m.pic_url}}">
+                                </div>
+                                <div>
+                                        <a href="main/detail/{{m.mid}}" >
+                                                {{m.cname}} </a>
 
 
+                                </div>
+                                <div>
+                                        主演:
+                                        <font size="2">
+                                                {{m.actors}}
+                                        </font>
+                                </div>
+                                <div>豆瓣：{{m.rate}}</div>
 
-                </div>
-                {% endfor %}
+                                <div>imdb:{{m.imdb_rate}}</div>
+                                <div>
+                                        资源:{{m.quality}} 
+                                </div>
+
+
+                        </th> 
+                </tr>
+        </table>
+
+
+
+</div>
+{% endfor %}
 
 {% else %}
 <p>No movie are available.</p>

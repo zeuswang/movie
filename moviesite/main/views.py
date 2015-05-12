@@ -100,7 +100,6 @@ def hello(request):
     imdbmap = { it.mid:it for it in imdbs }
     print imdbmap
     linkidmidmap = { it.id:it.mid for it in links }
-
     for m in movies:
         m.pic_url = 'pic/s/'+ str(m.mid) +'.jpg'
         m.links=[]
@@ -115,10 +114,22 @@ def hello(request):
                 if len(actors) ==3:
                     break
         m.actors = '/'.join(actors)
+
+        qualitymap = {}
+        have_default = False
         for link in links:
             #if link.mid == m.mid:
                
             if linkidmidmap[link.id] == m.mid:
+                qlist = link.quality.split('/')
+                if len(qlist)>0:
+                    for q in qlist:
+                        key = q.strip()
+                        if 'default' in key:
+                            have_default = True
+                        else:
+                            qualitymap[key]=1
+
                 if link.imdbid !=0:
                     imdbid = link.imdbid
        
@@ -130,6 +141,13 @@ def hello(request):
             print "imdbid",imdbid
             m.imdb_rate = imdbmap[imdbid].rate
         #print m.mid,m.cname,len(links)
+        if have_default and '1080p' not in qualitymap:
+            qualitymap['1080p'] =1
+        qlist = [ k for k,v in qualitymap.items() ]
+        qlist.sort()
+        qualitystr = '/'.join(qlist)
+        m.quality = qualitystr
+
     mlist = [m for m in movies ]
     if rate :
         mlist.sort(key=lambda x:x.rate,reverse=True)
@@ -211,10 +229,22 @@ def content(request):
                 if len(actors) ==3:
                     break
         m.actors = '/'.join(actors)
+
+        qualitymap ={}
+        have_default = False
         for link in links:
             #if link.mid == m.mid:
                
             if linkidmidmap[link.id] == m.mid:
+                qlist = link.quality.split('/')
+                if len(qlist)>0:
+                    for q in qlist:
+                        key = q.strip()
+                        if 'default' in key:
+                            have_default = True
+                        else:
+                            qualitymap[key]=1
+
                 if link.imdbid !=0:
                     imdbid = link.imdbid
        
@@ -226,6 +256,14 @@ def content(request):
             print "imdbid",imdbid
             m.imdb_rate = imdbmap[imdbid].rate
         #print m.mid,m.cname,len(links)
+        if have_default and '1080p' not in qualitymap:
+            qualitymap['1080p'] =1
+        qlist = [ k for k,v in qualitymap.items() ]
+        qlist.sort()
+        qualitystr = '/'.join(qlist)
+        m.quality = qualitystr
+
+
 
     mlist = []
     if type!=None:
