@@ -1,6 +1,10 @@
 
 {% if movie %}
 <div>
+        <img src="{{STATIC_URL}}{{movie.pic_url}}">
+</div>
+
+<div>
         {{movie.cname}}
 </div>
 <div>
@@ -16,9 +20,9 @@
 <div>豆瓣：{{movie.rate}}</div>
 
 <div>imdb:{{movie.imdb_rate}}</div>
-        {% for l in movie.links %}
-                <p><a href="{{l.url}}" target="_blank">{{l.title}}</a></p>
-        {% endfor %}
+{% for l in movie.links %}
+<p><a href="{{l.url}}" target="_blank">{{l.title}}</a></p>
+{% endfor %}
 
 {% else %}
 <p>No movie are available.</p>

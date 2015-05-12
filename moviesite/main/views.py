@@ -102,7 +102,7 @@ def hello(request):
     linkidmidmap = { it.id:it.mid for it in links }
 
     for m in movies:
-#        m.pic_url = 'photos/pic/'+ str(m.mid) +'.jpg'
+        m.pic_url = 'pic/s/'+ str(m.mid) +'.jpg'
         m.links=[]
         m.found_date = 0
         m.imdb_rate =0
@@ -198,7 +198,7 @@ def content(request):
     imdbmap = { it.mid:it for it in imdbs }
 
     for m in movies:
-#        m.pic_url = 'photos/pic/'+ str(m.mid) +'.jpg'
+        m.pic_url = 'pic/s/'+ str(m.mid) +'.jpg'
         m.links=[]
         m.found_date = 0
         m.imdb_rate =0
@@ -260,6 +260,8 @@ def detail(request):
     imdbmap = { it.mid:it for it in imdbs }
     imdbid = 0
     m.links = []
+
+    m.pic_url = 'pic/'+ str(m.mid) +'.jpg'
     for link in links:
             #if link.mid == m.mid:
                
