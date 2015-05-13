@@ -139,20 +139,16 @@ def get_imdb_movies(parser,mlist):
 
                 dlist = handler.dir_parse(url,page) 
                 for ti in dlist:
-                    print "xxx",ti.url
-
+                    print "get imdb dir_parse",ti.raw,ti.url,ti.year
                     imdbid = ti.url.split("title/")[1].split("/")[0]
                     if "tt" in imdbid:
                         ti.imdbid = imdbid.replace('tt','')
-
-                    print ti.year
-                    print m.year
-                    print m.ename
-                    print "xxx"
+                    print "m ename",m.ename
+                    print "m year",m.year
                     if abs(int(ti.year)  - int(m.year)) <=1:
-                        ti.search_key = m.ename
                         m.imdbid = ti.imdbid
                         res.append(ti)
+                        print "print add imdb result",ti.url
                         break
             time.sleep(1)
 

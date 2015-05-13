@@ -14,7 +14,8 @@ banyungong_remove_pattern_list = [r'\[[^\[\]]+\]{1}',
                                 '’']
 banyungong_pattern_list = [r'([\w\d\.]+[0-9]{4}\.)',
                            r'([\w\d\s]+[0-9]{4}\s)',
-                           r'([\w\d\s\'\:\-]+\([0-9]{4}\))']
+                           r'([\w\d\s\'\:\-]+\([0-9]{4}\))',
+                           r'([\w\d\s\'\:\-]+（[0-9]{4}）)']
 
 common_pattern_list = [r'[二两三四五六七八九十一]+部曲',
                         r'全集',
@@ -75,9 +76,9 @@ def banyungong_title(name):
         p = re.compile(pattern) 
         match = p.findall(s)
         for t in match:
-            print "xxxxx",t
-            print "xxxxx",s
-            print "xxx",pattern
+            #print "xxxxx",t
+            #print "xxxxx",s
+            #print "xxx",pattern
             s = s.replace(t,'')
     #        print s
     ename = ""
@@ -108,10 +109,7 @@ def banyungong_title(name):
         #t.ename = t.ename.strip('.')
     t.year = year
 
-    if ename ==  "" and cname  == "":
-        return None
-    else:
-        return t
+    return t
 
 
 def get_title(urlname,str_all):

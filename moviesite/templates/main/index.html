@@ -88,107 +88,108 @@ $(document).ready(function(){
 </head>
 <body>
         <div class='row'  style="width:1500px;margin:0 auto">
-        <div class="col-lg-6">
-                <div class="input-group">
-                        <input type="text" class="form-control" id="input_search" placeholder="Search for...">
-                        <span class="input-group-btn">
-                                <button class="btn btn-default" id="search" type="button">Go!</button>
-                        </span>
-                </div><!-- /input-group -->
-        </div><!-- /.col-lg-6 -->
+                <div class="col-lg-6">
+                        <div class="input-group">
+                                <input type="text" class="form-control" id="input_search" placeholder="Search for...">
+                                <span class="input-group-btn">
+                                        <button class="btn btn-default" id="search" type="button">Go!</button>
+                                </span>
+                        </div><!-- /input-group -->
+                </div><!-- /.col-lg-6 -->
         </div>
 
         <div class='row'  style="width:1500px;margin:0 auto">
-        <p> 本站点使用jquery2，因此不支持ie 6,7,8 !!!</p>
+                <p> 本站点使用jquery2，因此不支持ie 6,7,8 !!!</p>
         </div>
 
-<div class='row'  style="width:1500px;margin:0 auto">
-        <td> 按类型 </td>
-        <td> 
-                <button type="button" id="type-xiju" class="btn btn-default">喜剧</button>
-        </td>
+        <div class='row'  style="width:1500px;margin:0 auto">
+                <td> 按类型 </td>
+                <td> 
+                        <button type="button" id="type-xiju" class="btn btn-default">喜剧</button>
+                </td>
 
-        <td> 
+                <td> 
 
-                <button type="button" id="type-dongzuo" class="btn btn-default">动作</button>
-        </td>
-        <td> 
-                <button type="button" id="type-donghua" class="btn btn-default">动画</button>
-        </td>
-        <td> 
-                <button type="button" id="type-juqing" class="btn btn-default">剧情</button>
-        </td>
-        <td> 
+                        <button type="button" id="type-dongzuo" class="btn btn-default">动作</button>
+                </td>
+                <td> 
+                        <button type="button" id="type-donghua" class="btn btn-default">动画</button>
+                </td>
+                <td> 
+                        <button type="button" id="type-juqing" class="btn btn-default">剧情</button>
+                </td>
+                <td> 
 
-                <button type="button" id="type-jiating" class="btn btn-default">家庭</button>
-        </td>
-        <td> 
-                <button type="button" id="type-kehuan" class="btn btn-default">科幻</button>
-        </td>
-        <td> 
-                <button type="button" id="type-maoxian" class="btn btn-default">冒险</button>
-        </td>
-        <td> 
-                <button type="button" id="type-xuanyi" class="btn btn-default">悬疑</button>
-        </td>
-        <td> 
+                        <button type="button" id="type-jiating" class="btn btn-default">家庭</button>
+                </td>
+                <td> 
+                        <button type="button" id="type-kehuan" class="btn btn-default">科幻</button>
+                </td>
+                <td> 
+                        <button type="button" id="type-maoxian" class="btn btn-default">冒险</button>
+                </td>
+                <td> 
+                        <button type="button" id="type-xuanyi" class="btn btn-default">悬疑</button>
+                </td>
+                <td> 
 
-                <button type="button" id="type-kongbu" class="btn btn-default">恐怖</button>
-        </td>
-        <td> 
-                <button type="button" id="type-qihuan" class="btn btn-default">奇幻</button>
-        </td>
-        <td> 
-                <button type="button" id="type-jingsong" class="btn btn-default">惊悚</button>
-        </td>
-        <td> 
-                <button type="button" id="type-zhanzheng" class="btn btn-default">战争</button>
-        </td>
-
-
-
-</div>
-<div>
-        <div id="content" class='row'  style="width:1500px;margin:0 auto">
-
-                {% if mlist %}
-                {% for m in mlist %}
-                <div class="col-md-1" style="width:250px;height:400px;">
-                        <table class="table table-bordered">
-                                <tr>
-                                        <th style="width:250px;height:400px;">
-
-                                                <div>
-                                                        <img src="{{STATIC_URL}}{{m.pic_url}}">
-                                                </div>
-                                            <div>
-                                                        <a href="main/detail/{{m.mid}}" >
-                                                                {{m.cname}} </a>
-                                               </div>
- 
-                                               <div>
-                                                      主演:
-                                                     <font size="2">
-                                                    {{m.actors}}
-                                            </font>
-                                               </div>
-                                                <div>豆瓣：{{m.rate}}</div>
-                                                    
-                                                <div>imdb:{{m.imdb_rate}}</div>
-                                                <div>
-                                                        资源:{{m.quality}} 
-                                                </div>
-
-                                </th> 
-                                </tr>
-                        </table>
+                        <button type="button" id="type-kongbu" class="btn btn-default">恐怖</button>
+                </td>
+                <td> 
+                        <button type="button" id="type-qihuan" class="btn btn-default">奇幻</button>
+                </td>
+                <td> 
+                        <button type="button" id="type-jingsong" class="btn btn-default">惊悚</button>
+                </td>
+                <td> 
+                        <button type="button" id="type-zhanzheng" class="btn btn-default">战争</button>
+                </td>
 
 
 
+        </div>
+        <div>
+                <div id="content" class='row'  style="width:1500px;margin:0 auto">
+
+                        {% if mlist %}
+                        {% for m in mlist %}
+                        <div class="col-md-1" style="width:250px;height:400px;">
+                                <table class="table table-bordered">
+                                        <tr>
+                                                <th style="width:250px;height:400px;">
+
+                                                        <div style="height:250px;overflow:hidden;margin:0 auto" >
+                                                                <img src="{{STATIC_URL}}{{m.pic_url}}" >
+                                                        </div>
+                                                        <div>
+                                                                <a href="main/detail/{{m.mid}}" >
+                                                                        {{m.cname}} </a>
+                                                        </div>
+                                                        <div >
+                                                                <div>
+                                                                        主演:
+                                                                        <font size="2">
+                                                                                {{m.actors}}
+                                                                        </font>
+                                                                </div>
+                                                                <div>豆瓣：{{m.rate}}</div>
+
+                                                                <div>imdb:{{m.imdb_rate}}</div>
+                                                                <div>
+                                                                        资源:{{m.quality}} 
+                                                                </div>
+                                                        </div>
+
+                                                </th> 
+                                        </tr>
+                                </table>
+
+
+
+                        </div>
+                        {% endfor %}
+                        {% endif %}
                 </div>
-                {% endfor %}
-                {% endif %}
         </div>
-</div>
 
 </body>

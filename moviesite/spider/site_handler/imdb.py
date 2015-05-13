@@ -87,8 +87,7 @@ class imdb_handler(SiteHandler):
                         imdburl = imdburl.split("/?ref")[0]
                         title.url = imdburl
                         title.raw = d['title']
-                        print "imdb",title.url
-                        print title.year
+                        print "imdb,dir_parse",title.raw,title.url,title.year
                         res.append(title)
         return res
 
